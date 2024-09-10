@@ -1,0 +1,115 @@
+﻿@model List<Consultum>
+
+@{
+    ViewData["Title"] = "Listar Consultas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Lista de consultas</h1>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="opcionConsultas">Buscar por</label>
+            <select class="form-control" id="opcionConsultas">
+                <option value="-2">Listar todo</option>
+                <option value="1">Nombre(s)</option>
+                <option value="2">Número de documento</option>
+                <option value="3">Especialidad</option>
+                <option value="4">Motivo</option>
+            </select>
+        </div>
+        <div class="col-md-5 d-none" id="buscarFieldsConsultas">
+            <label>&nbsp;</label>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Ingresar criterio de búsqueda" id="buscarCriterioConsultas" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onclick="onSearch('consultas')">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+
+<div class="table-responsive d-none d-lg-block">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="table-primary">
+                <th>Acciones</th>
+                <th data-search-type="1">Fecha de la consulta</th>
+                <th data-search-type="2">Nombre Paciente</th>
+                <th data-search-type="3">Especialidad</th>
+                <th data-search-type="4">Motivo</th>
+                <th>Enfermedad</th>
+                <th>Historial</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                @foreach (var consulta in Model)
+                {
+                    <tr id="consulta-@consulta.IdConsulta" data-type="consultas">
+                        <td>
+                            <a asp-action="VerConsulta" asp-route-id="@consulta.IdConsulta" class="btn btn-outline-success">
+                                <i class="fa-regular fa-eye"></i> Visualizar
+                            </a>
+                        </td>
+                        <td data-search-type="1">@consulta.FechacreacionConsulta</td>
+                        <td data-search-type="2">@consulta.PacienteConsultaPNavigation?.PrimernombrePacientes @consulta.PacienteConsultaPNavigation?.PrimerapellidoPacientes</td>
+                        <td data-search-type="3">@ViewBag.UsuarioEspecialidad</td>
+                        <td data-search-type="4">@consulta.MotivoConsulta</td>
+                        <td>@consulta.EnfermedadConsulta</td>
+                        <td>@consulta.HistorialConsulta</td>
+                        <td>@consulta.EstadoConsultaC</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center">No se encontraron consultas.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="card-columns d-lg-none">
+    @foreach (var consulta in Model)
+    {
+        <div class="card" data-type="consultas">
+            <div class="card-body" data-id="@consulta.IdConsulta">
+                <h5 class="card-title" data-search-type="2">@consulta.PacienteConsultaPNavigation?.PrimernombrePacientes @consulta.PacienteConsultaPNavigation?.PrimerapellidoPacientes</h5>
+                <p class="card-text" data-search-type="1"><strong>Fecha de la consulta:</strong> @consulta.FechacreacionConsulta</p>
+                <p class="card-text" data-search-type="3"><strong>Especialidad:</strong> @ViewBag.UsuarioEspecialidad</p>
+                <p class="card-text" data-search-type="4"><strong>Motivo:</strong> @consulta.MotivoConsulta</p>
+                <p class="card-text"><strong>Enfermedad:</strong> @consulta.EnfermedadConsulta</p>
+                <p class="card-text"><strong>Historial:</strong> @consulta.HistorialConsulta</p>
+                <p class="card-text"><strong>Estado:</strong> @consulta.EstadoConsultaC</p>
+                <a asp-action="VerConsulta" asp-route-id="@consulta.IdConsulta" class="btn btn-outline-success btn-sm">
+                    <i class="fa-regular fa-eye"></i> Visualizar
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="noResultsConsultas" class="no-results d-none">
+    No se encontraron resultados.
+</div>
+
+<a asp-action="CrearConsulta" asp-controller="Consultation" class="btn btn-outline-primary" style="margin-left:80%">
+    <i class="fa fa-plus"></i> Añadir nueva consulta
+</a>
+
+@section Scripts {
+    <script src="~/js/searchConsultationFunctions.js"></script>
+}

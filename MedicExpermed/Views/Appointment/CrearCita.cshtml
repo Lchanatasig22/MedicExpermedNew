@@ -1,0 +1,205 @@
+﻿@model Citum
+@{
+    ViewData["Title"] = "CrearCita";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>GENERAR UNA NUEVA CITA</h1>
+<div id="camp">
+    Campo Obligatorio *
+</div>
+
+<form asp-action="GenerarCita" class="row g-3" method="post" id="citaForm">
+    <div class="col-md-6">
+        <label asp-for="FechadelacitaCita" class="form-label">Fecha de la Cita *</label>
+        <input asp-for="FechadelacitaCita" id="fechaCita" class="form-control" type="date" />
+        <span asp-validation-for="FechadelacitaCita" class="text-danger" id="fechaError"></span>
+        <input type="hidden" asp-for="EstadoCita" class="form-control" value="1" readonly />
+
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="HoradelacitaCita" class="form-label">Hora de la Cita</label>
+        <input type="time" class="form-control" asp-for="HoradelacitaCita" id="horaCita" readonly />
+    </div>
+
+    <input type="hidden" asp-for="UsuarioId" id="medicoId" value="@ViewBag.UsuarioId" />
+    <input type="hidden" asp-for="UsuariocreacionCita" value="@ViewBag.UsuarioNombre" />
+    <input type="hidden" asp-for="PacienteId" value="@ViewBag.PacienteId" />
+
+    <div class="col-md-12">
+        <label asp-for="Motivo" class="form-label">Motivo Consulta</label>
+        <textarea asp-for="Motivo" class="form-control" required></textarea>
+    </div>
+
+    <div class="col-12 text-center">
+        <button type="button" onclick="consultarCita()" class="btn btn-outline-success me-2" style="border-radius:15px">
+            <i class="fa fa-search"></i> Consultar Disponibilidad Cita
+        </button>
+    </div>
+</form>
+
+<!-- Formulario de Horas Disponibles -->
+<div id="formHorasDisponibles" style="display: none;">
+    <h2>Horas Disponibles</h2>
+    <button type="button" class="btn btn-danger" onclick="cerrarFormularioHoras()">Cerrar</button>
+    <div id="hoursContainer" class="hours-grid"></div>
+</div>
+
+<!-- Mover los estilos a un archivo CSS separado -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+
+<!-- Cargar los scripts de manera no bloqueante -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const fechaCita = document.getElementById('fechaCita');
+        const horaCita = document.getElementById('horaCita');
+        const medicoId = document.getElementById('medicoId');
+        const formHorasDisponibles = document.getElementById('formHorasDisponibles');
+        const hoursContainer = document.getElementById('hoursContainer');
+        const fechaError = document.getElementById('fechaError');
+
+        // Establece la fecha mínima como la fecha actual
+        const today = new Date().toISOString().split('T')[0];
+        fechaCita.setAttribute('min', today);
+
+        // Añade el evento para validar campos cuando la fecha cambia
+        fechaCita.addEventListener('change', validarCampos);
+
+        // Función para consultar las horas disponibles para una cita
+        function consultarCita() {
+            if (fechaCita.value && medicoId.value) {
+                $.ajax({
+                    url: '@Url.Action("ObtenerHorasDisponibles", "Appointment")',
+                    type: 'POST',
+                    data: {
+                        fechaCita: fechaCita.value,
+                        medicoId: medicoId.value
+                    },
+                    success: function (response) {
+                        console.log("Horas disponibles recibidas del servidor:", response);
+                        displayAvailableHours(response);
+                        formHorasDisponibles.style.display = 'block';
+                    },
+                    error: function (error) {
+                        console.error('Error al obtener las horas disponibles:', error);
+                        Swal.fire('Error', 'Error al obtener las horas disponibles.', 'error');
+                    }
+                });
+            } else {
+                Swal.fire('Advertencia', 'Por favor, seleccione una fecha.', 'warning');
+            }
+        }
+
+        // Función para mostrar las horas disponibles
+        function displayAvailableHours(response) {
+            hoursContainer.innerHTML = ''; // Limpia el contenedor de horas
+
+            const hours = response.$values; // Accede al array que contiene las horas disponibles
+
+            if (hours && hours.length > 0) {
+                hours.forEach(item => {
+                    const hour = item.horadelacitaCita; // Extraer la hora de cada objeto
+
+                    const card = document.createElement('div');
+                    card.className = 'hour-card'; // Aplicar estilo
+
+                    const img = document.createElement('img');
+                    img.src = '/images/free-doctor-icon-313-thumb.png';
+                    img.alt = 'Doctor available';
+
+                    const time = document.createElement('div');
+                    time.textContent = hour;
+
+                    card.appendChild(img);
+                    card.appendChild(time);
+                    hoursContainer.appendChild(card);
+
+                    card.addEventListener('click', () => {
+                        Swal.fire({
+                            title: 'Confirmar selección',
+                            text: `¿Estás seguro de que deseas seleccionar la hora: ${hour}?`,
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonText: 'Sí',
+                            cancelButtonText: 'No'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                horaCita.value = hour;
+                                formHorasDisponibles.style.display = 'none';
+
+                                // Validar campos y enviar formulario automáticamente
+                                if (fechaCita.value && horaCita.value) {
+                                    enviarFormularioConAjax(); // Enviar el formulario con AJAX
+                                }
+                            }
+                        });
+                    });
+                });
+            } else {
+                hoursContainer.innerHTML = '<p>No hay horas disponibles</p>';
+            }
+        }
+
+        // Función para enviar el formulario usando AJAX
+        function enviarFormularioConAjax() {
+            const formData = {
+                FechadelacitaCita: fechaCita.value,
+                HoradelacitaCita: horaCita.value,
+                UsuarioId: parseInt(medicoId.value) || 0, // Asegúrate de que es un número, 0 si es inválido
+                UsuariocreacionCita: $('#citaForm').find('input[name="UsuariocreacionCita"]').val() || '',
+                PacienteId: parseInt($('#citaForm').find('input[name="PacienteId"]').val()) || 0, // Asegúrate de que es un número, 0 si es inválido
+                Motivo: $('#citaForm').find('textarea[name="Motivo"]').val() || '',
+                EstadoCita: $('#citaForm').find('input[name="EstadoCita"]').val() || 1
+            };
+
+            console.log("Datos enviados al servidor:", formData); // Imprime los datos enviados
+
+            $.ajax({
+                url: '@Url.Action("GenerarCita", "Appointment")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Cita creada',
+                        text: 'La cita ha sido creada con éxito.',
+                        icon: 'success',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        willClose: () => {
+                            window.location.href = '@Url.Action("ListarCitas", "Appointment")';
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.error('Error al crear la cita:', error);
+                    Swal.fire('Error', 'Hubo un problema al crear la cita.', 'error');
+                }
+            });
+        }
+
+
+
+        // Función para validar campos (puedes agregar lógica de validación adicional aquí si es necesario)
+        function validarCampos() {
+            if (fechaCita.value && horaCita.value && !fechaError.textContent) {
+                // No se necesita hacer nada aquí ya que la cita se crea automáticamente
+            }
+        }
+
+        // Función para cerrar el formulario de horas disponibles
+        window.cerrarFormularioHoras = function () {
+            formHorasDisponibles.style.display = 'none';
+        };
+
+        // Hacer la función 'consultarCita' global para que esté disponible en el onclick del botón
+        window.consultarCita = consultarCita;
+    });
+</script>
+

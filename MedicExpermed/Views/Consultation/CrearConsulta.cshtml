@@ -1,0 +1,1694 @@
+﻿@model Consultation
+@{
+    ViewData["Title"] = "CrearConsulta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>GENERAR NUEVA CONSULTA</h1>
+
+<div class="container mt-5">
+    <div class="stepwizard">
+        <div class="stepwizard-row">
+            <div class="stepwizard-step">
+                <button type="button" class="btn btn-primary btn-circle" data-step="1">1</button>
+                <p>Datos del paciente</p>
+            </div>
+            <div class="stepwizard-step">
+                <button type="button" class="btn btn-secondary btn-circle" data-step="2" disabled="disabled">2</button>
+                <p>Datos consulta</p>
+            </div>
+            <div class="stepwizard-step">
+                <button type="button" class="btn btn-secondary btn-circle" data-step="3" disabled="disabled">3</button>
+                <p>Signos vitales</p>
+            </div>
+            <div class="stepwizard-step">
+                <button type="button" class="btn btn-secondary btn-circle" data-step="4" disabled="disabled">4</button>
+                <p>Diagnóstico</p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <form role="form" id="consultationForm" method="post" asp-action="CrearConsulta">
+        <!--Campos ocultos para manejo de variables-->
+        <input type="hidden" class="form-control" asp-for="UsuarioCreacion" id="usuarioNombre" value="@ViewBag.UsuarioNombre" />
+        <input type="hidden" asp-for="MedicoId" id="medicoId" value="@ViewBag.UsuarioId" />
+        <input type="hidden" asp-for="EspecialidadId" id="especialidadId" value="@ViewBag.UsuarioIdEspecialidad" />
+        <input type="hidden" asp-for="FechaCreacion" id="FechacreacionConsulta" value="" />
+        <input type="hidden" asp-for="ConsultaPrincipal" id="consultaprincipal_consulta" value="sn" />
+        <input type="hidden" asp-for="SecuencialConsulta" id="secuencial" value="sn" />
+        <input type="hidden" asp-for="EstadoConsulta" id="estadoConsultaC" value="1" />
+        <input type="hidden" asp-for="TipoConsultaId" id="tipoConsultaC" value="1" />
+        <input type="hidden" asp-for="NotasEvolucion" id="notasevolucion_consulta" value="1" />
+        <!--Primer Formulario-->
+        <div class="setup-content" id="step-1">
+            <div class="hr-text">
+                <hr>
+                <span><i class="fas fa-user"></i> Datos Personales</span>
+                <hr>
+            </div>
+            <!--Busqueda de pacientes-->
+
+            <div id="search-container" data-url="@Url.Action("BuscarPacientes", "Consultation")">
+                <div class="input-group sm-2">
+                    <!-- Dropdown para seleccionar el criterio de búsqueda -->
+                    <select id="search-criteria" class="form-select">
+                        <option>Búsqueda por</option>
+                        <option value="cedula">Cédula</option>
+                        <option value="nombre">Nombre</option>
+                        <option value="apellido">Apellido</option>
+                    </select>
+
+                    <input id="search-input" type="text" class="form-control" placeholder="Buscar paciente" aria-label="Buscar paciente">
+
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" type="button" onclick="buscarPaciente()">
+                            <i class="fa fa-search"></i> Buscar
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="row g-3">
+                    <div class="col-sm-3" hidden>
+                        <label for="idPaciente">Identificador Paciente</label>
+                        <input type="text" asp-for="PacienteId" class="form-control" id="idPaciente" placeholder="Máximo 200 caracteres" readonly>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="primerApellido">Primer apellido</label>
+                        <input type="text" class="form-control" id="primerApellido" placeholder="Máximo 200 caracteres" disabled>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="segundoApellido">Segundo apellido</label>
+                        <input type="text" class="form-control" id="segundoApellido" placeholder="Máximo 200 caracteres" disabled>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="primerNombre">Primer nombre</label>
+                        <input type="text" class="form-control" id="primerNombre" placeholder="Máximo 200 caracteres" disabled>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="segundoNombre">Segundo nombre</label>
+                        <input type="text" class="form-control" id="segundoNombre" placeholder="Máximo 150 caracteres" disabled>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <label for="tipoDocumentoSelect" class="form-label">Tipo documento *</label>
+                        <select class="form-control" id="tipoDocumentoSelect" required disabled>
+                            <option value="">Seleccione...</option>
+                            @if (ViewBag.TiposDocumentos != null)
+                            {
+                                @foreach (var tipoDocumento in ViewBag.TiposDocumentos)
+                                {
+                                    <option value="@tipoDocumento.IdCatalogo">@tipoDocumento.DescripcionCatalogo</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="numeroDocumento">Número de documento</label>
+                        <input type="text" class="form-control" id="numeroDocumento" placeholder="Máximo 150 caracteres" disabled>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="tipoSangreSelect">Tipo de sangre</label>
+                        <select class="form-control" id="tipoSangre" required disabled>
+                            <option value="">Seleccione...</option>
+                            @if (ViewBag.TiposSangre != null)
+                            {
+                                @foreach (var tipoSangre in ViewBag.TiposSangre)
+                                {
+                                    <option value="@tipoSangre.IdCatalogo">@tipoSangre.DescripcionCatalogo</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="esdonante">Es donante</label>
+                        <select class="form-control" id="esdonante" disabled>
+                            <option value="">Seleccione</option>
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="fechaNacimiento">Fecha de nacimiento</label>
+                        <input type="date" class="form-control" id="fechaNacimiento" disabled>
+                    </div>
+                    <div class="col-sm-1">
+                        <label for="edad">Edad</label>
+                        <input type="number" class="form-control" id="edad" placeholder="Ej:25" disabled>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="sexo">Sexo</label>
+                        <select class="form-control" id="sexoSelect" disabled>
+                            <option value="">Seleccione...</option>
+                            @if (ViewBag.TiposGenero != null)
+                            {
+                                @foreach (var tipoGenero in ViewBag.TiposGenero)
+                                {
+                                    <option value="@tipoGenero.IdCatalogo">@tipoGenero.DescripcionCatalogo</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="estadoCivil">Estado civil</label>
+                        <select class="form-control" id="estadoCivilSelect" disabled>
+                            <option value="">Seleccione...</option>
+                            @if (ViewBag.TiposEstadoCivil != null)
+                            {
+                                @foreach (var tipoEstadoCivil in ViewBag.TiposEstadoCivil)
+                                {
+                                    <option value="@tipoEstadoCivil.IdCatalogo">@tipoEstadoCivil.DescripcionCatalogo</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="formacionProfesional">Formación profesional</label>
+                        <select class="form-control" id="formacionProfesionalSelect" required disabled>
+                            <option value="">Seleccione...</option>
+                            @if (ViewBag.TiposFormacion != null)
+                            {
+                                @foreach (var tiposFormacion in ViewBag.TiposFormacion)
+                                {
+                                    <option value="@tiposFormacion.IdCatalogo">@tiposFormacion.DescripcionCatalogo</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="hr-text">
+                        <hr>
+                        <span><i class="fas fa-address-book"></i> Datos de Contacto</span>
+                        <hr>
+                    </div>
+
+                    <div class="form-group col-sm-3">
+                        <label for="nacionalidadSelect" class="form-label">Nacionalidad</label>
+                        <select class="form-control" id="nacionalidadSelect" disabled>
+                            <option value="">Seleccione...</option>
+
+                            @if (ViewBag.TiposNacionalidad != null)
+                            {
+                                @foreach (var tiposNacionalidad in ViewBag.TiposNacionalidad)
+                                {
+                                    <option value="@tiposNacionalidad.IdPais">@tiposNacionalidad.GentilicioPais</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="direccion">Dirección</label>
+                        <input type="text" class="form-control" id="direccion" placeholder="Máximo 150 caracteres" disabled>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="telefono">Teléfono</label>
+                        <input type="text" class="form-control" id="telefono" placeholder="Máximo 150 caracteres" disabled>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="telefonoCelular">Teléfono Celular</label>
+                        <input type="text" class="form-control" id="telefonoCelular" placeholder="Máximo 150 caracteres" disabled>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Máximo 150 caracteres" disabled>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="ocupacion">Ocupación</label>
+                        <input type="text" class="form-control" id="ocupacion" placeholder="Máximo 150 caracteres" disabled>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="empresa">Empresa</label>
+                        <input type="text" class="form-control" id="empresa" placeholder="Máximo 150 caracteres" disabled>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="seguroSalud">Seguro de salud</label>
+                        <select class="form-control" id="seguroSelect" required disabled>
+                            <option value="">Seleccione...</option>
+
+                            @if (ViewBag.TiposSeguro != null)
+                            {
+                                @foreach (var tiposSeguro in ViewBag.TiposSeguro)
+                                {
+                                    <option value="@tiposSeguro.IdCatalogo">@tiposSeguro.DescripcionCatalogo</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="historiaClinica">Historia Clínica*</label>
+                        <input type="text" class="form-control" asp-for="HistorialConsulta" id="historiaClinica" placeholder="Máximo 150 caracteres" readonly>
+                        <span asp-validation-for="HistorialConsulta" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end mt-3">
+                <a asp-action="ListarConsultas" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
+                <button class="btn btn-outline-primary nextBtn btn-lg ms-3" type="button" onclick="goToNextStep(2, event)">Siguiente <i class="fa fa-arrow-right"></i></button>
+            </div>
+
+
+        </div>
+
+        <!--Formulario numero 2-->
+        <div class="setup-content" id="step-2" style="display: none;">
+
+
+            <div class="hr-text">
+                <hr>
+                <span><i class="fa fa-search"></i> Datos de Contacto</span>
+                <hr>
+
+            </div>
+
+            <div class="row g-3">
+                <!--TABLAS DE DATOS-->
+                <div class="one field">
+                    <div class="field">
+                        <table class="ui very basic collapsing celled table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-user"></i>
+                                                <div class="content">
+                                                    <div class="header">Paciente</div>
+                                                    <div class="description" id="pacienteNombreStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-id-card"></i>
+                                                <div class="content">
+                                                    <div class="header">Número de documento</div>
+                                                    <div class="description" id="numeroDocumentoTablaStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-venus-mars"></i>
+                                                <div class="content">
+                                                    <div class="header">Sexo</div>
+                                                    <div class="description" id="sexoTablaStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-tint"></i>
+                                                <div class="content">
+                                                    <div class="header">Tipo de sangre</div>
+                                                    <div class="description" id="tipoSangreTablaStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                <div class="content">
+                                                    <div class="header">Fecha de nacimiento</div>
+                                                    <div class="description" id="fechaNacimientoTablaStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-calendar"></i>
+                                                <div class="content">
+                                                    <div class="header">Edad</div>
+                                                    <div class="description" id="edadTablaStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-id-badge"></i>
+                                                <div class="content">
+                                                    <div class="header">Estado civil</div>
+                                                    <div class="description" id="estadoCivilTablaStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-bookmark"></i>
+                                                <div class="content">
+                                                    <div class="header">Formación profesional</div>
+                                                    <div class="description" id="formacionProfesionalTablaStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-thumbtack"></i>
+                                                <div class="content">
+                                                    <div class="header">Nacionalidad</div>
+                                                    <div class="description" id="nacionalidadTablaStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-phone-square"></i>
+                                                <div class="content">
+                                                    <div class="header">Teléfono</div>
+                                                    <div class="description" id="telefonoTablaStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-mobile-alt"></i>
+                                                <div class="content">
+                                                    <div class="header">Teléfono celular</div>
+                                                    <div class="description" id="telefonoCelularTablaStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-envelope-square"></i>
+                                                <div class="content">
+                                                    <div class="header">Email</div>
+                                                    <div class="description" id="emailTablaStep2">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--FIN TABLAS DATOS-->
+
+                <div class="col-sm-3">
+                    <label for="nombrePariente">Acompañante</label>
+                    <input type="text" class="form-control" id="acompañante" asp-for="NombrePariente" placeholder="Nombre(s),Apellido(s)">
+                </div>
+                <div class="col-sm-3">
+                    <label for="esdonante"> Parentesco</label>
+                    <select class="form-select" asp-for="TipoPariente" id="tipoParienteSelect" required>
+                        <option value="">Seleccione...</option>
+                        @if (ViewBag.TiposPariente != null)
+                        {
+                            @foreach (var tiposPariente in ViewBag.TiposPariente)
+                            {
+                                <option value="@tiposPariente.IdCatalogo">@tiposPariente.DescripcionCatalogo</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label for="telefonoPariente">Telefono</label>
+                    <input type="tel" class="form-control" asp-for="TelefonoPariente" id="telefonoPariente" placeholder="Ingrese el telefono" maxlength="10" pattern="\d{10}">
+                </div>
+
+                <div class="col-sm-12">
+                    <label for="motivoConsulta">Motivo de consulta*</label>
+                    <input type="text" class="form-control" asp-for="MotivoConsulta" id="motivoConsulta" placeholder="Motivo de su consulta 150 caracteres" required>
+                </div>
+
+                <div class="hr-text">
+                    <hr>
+                    <span><i class="fas fa-user"></i> Antecedentes personales</span>
+                    <hr>
+                </div>
+
+                <!-- Antecedentes Personales -->
+                <div class="col-sm-12 position-relative">
+                    <textarea type="text" maxlength="8000" rows="2" class="form-control" asp-for="AntecedentesPersonales" id="antecedentespersonalesConsulta" placeholder="Coloque una breve descripción, Si desea hablar precione el microfono"></textarea>
+                    <i id="dictationIcon1" class="fa fa-microphone position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="row mb-3">
+
+
+                        <div class="col-sm-3">
+                            <span><i class="fas fa-allergies"></i> Alergias</span>
+                            <select class="form-select select2" asp-for="Alergias" id="tipoAlergiaSelect" multiple="multiple">
+                                <option value="">Buscar</option>
+                                @if (ViewBag.TiposAlergias != null)
+                                {
+                                    foreach (var tipoAlergia in ViewBag.TiposAlergias)
+                                    {
+                                        <option value="@tipoAlergia.IdCatalogo">@tipoAlergia.DescripcionCatalogo</option>
+                                    }
+                                }
+                            </select>
+
+                        </div>
+                        <!-- Contenedor para las tarjetitas de alergias -->
+                        <div id="alergiasTagsContainer" class="tags-container"></div>
+                        <!-- Contenedor para los inputs ocultos de alergias -->
+                        <div id="hiddenAlergiaInputsContainer"></div>
+
+
+                        <div class="col-sm-3">
+                            <span><i class="fas fa-syringe"></i> Cirugías</span>
+                            <select class="form-select select2-tags" asp-for="Cirugias" id="tipoCirugiaSelect" multiple="multiple">
+                                <option value="">Buscar</option>
+                                @if (ViewBag.TiposCirugias != null)
+                                {
+                                    @foreach (var tipoCirugia in ViewBag.TiposCirugias)
+                                    {
+                                        <option value="@tipoCirugia.IdCatalogo">@tipoCirugia.DescripcionCatalogo</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <!-- Contenedor para las tarjetitas de cirugías -->
+                        <div id="cirugiasTagsContainer" class="tags-container"></div>
+                        <!-- Contenedor para los inputs ocultos de cirugías -->
+                        <div id="hiddenCirugiaInputsContainer"></div>
+
+
+
+                    </div>
+                </div>
+
+
+                <!--Antecedentes familiares-->
+                <div class="hr-text">
+                    <hr>
+                    <span><i class="fa fa-undo"></i> Antecedentes Familiares</span>
+                    <hr>
+                </div>
+
+
+                <div class="container mt-5">
+
+
+                    <div class="field">
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked"
+                                           name="Cardiopatia"
+                                           type="checkbox"
+                                           id="consulta-antecedente-checked-cardiopatia"
+                                    @(Model?.AntecedentesFamiliares?.Cardiopatia == true ? "checked" : "") />
+                                    <label class="form-check-label" for="consulta-antecedente-checked-cardiopatia">Cardiopatía</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 consulta-antecedente-observacion" id="consulta-observacion-cardiopatia" style="display: none;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <select class="form-select select2" asp-for="AntecedentesFamiliares.Cardiopatia" id="tipoDocumentoSelectCardiopatia">
+                                            <option value="183">Seleccione el familiar</option>
+                                            @if (ViewBag.TiposParienteAntece != null)
+                                            {
+                                                @foreach (var tipoDocumento in ViewBag.TiposParienteAntece)
+                                                {
+                                                    <option value="@tipoDocumento.IdCatalogo">@tipoDocumento.DescripcionCatalogo</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input placeholder="Observación (Máximo 300 caracteres)" asp-for="AntecedentesFamiliares.ObserCardiopatia" type="text" id="consulta-antecedente-observacion-diabetes" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked"
+                                           value="1"
+                                           type="checkbox"
+                                           id="consulta-antecedente-checked-diabetes"
+                                    @(Model?.AntecedentesFamiliares?.Diabetes == true ? "checked" : "")>
+                                    <label class="form-check-label" for="consulta-antecedente-checked-diabetes">Diabetes</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-diabetes" style="display: none;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <select class="form-select select2" asp-for="AntecedentesFamiliares.ParentescocatalogoDiabetes" id="tipoDocumentoSelectDiabetes">
+                                            <option value="183">Seleccione el familiar</option>
+                                            @if (ViewBag.TiposParienteAntece != null)
+                                            {
+                                                @foreach (var tipoDocumento in ViewBag.TiposParienteAntece)
+                                                {
+                                                    <option value="@tipoDocumento.IdCatalogo">@tipoDocumento.DescripcionCatalogo</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input placeholder="Observación (Máximo 300 caracteres)" asp-for="AntecedentesFamiliares.ObserDiabetes" type="text" id="consulta-antecedente-observacion-diabetes" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked"
+                                           name="EnfCardiovascular"
+                                    @(Model?.AntecedentesFamiliares?.EnfCardiovascular == true ? "checked" : "")
+                                           type="checkbox"
+                                           id="consulta-antecedente-checked-enfcardiovascular">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-enfcardiovascular">Enfermedad Cardiovascular</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-enfcardiovascular" style="display: none;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <select class="form-select select2" id="tipoDocumentoSelectEnfCardiovascular" asp-for="AntecedentesFamiliares.ParentescocatalogoEnfcardiovascular">
+                                            <option value="183">Seleccione el familiar</option>
+                                            @if (ViewBag.TiposParienteAntece != null)
+                                            {
+                                                @foreach (var tipoDocumento in ViewBag.TiposParienteAntece)
+                                                {
+                                                    <option value="@tipoDocumento.IdCatalogo">@tipoDocumento.DescripcionCatalogo</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input placeholder="Observación (Máximo 300 caracteres)" asp-for="AntecedentesFamiliares.ObserEnfCardiovascular" type="text" id="consulta-antecedente-observacion-enfcardiovascular" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" name="Hipertension" @(Model?.AntecedentesFamiliares.Hipertension == true ? "checked" : "") type="checkbox" id="consulta-antecedente-checked-hipertension">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-hipertension">Hipertensión</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-hipertension" style="display: none;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <select class="form-select select2" id="tipoDocumentoSelectHipertension" asp-for="AntecedentesFamiliares.ParentescocatalogoHipertension">
+                                            <option value="183">Seleccione el familiar</option>
+                                            @if (ViewBag.TiposParienteAntece != null)
+                                            {
+                                                @foreach (var tipoDocumento in ViewBag.TiposParienteAntece)
+                                                {
+                                                    <option value="@tipoDocumento.IdCatalogo">@tipoDocumento.DescripcionCatalogo</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input placeholder="Observación (Máximo 300 caracteres)" type="text" asp-for="AntecedentesFamiliares.ObserHipertension" id="consulta-antecedente-observacion-hipertension" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" name="Cancer" type="checkbox" @(Model?.AntecedentesFamiliares.Cancer == true ? "checked" : "") id="consulta-antecedente-checked-cancer">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-cancer">Cáncer</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-cancer" style="display: none;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <select class="form-select select2" id="tipoDocumentoSelectCancer" asp-for="AntecedentesFamiliares.ParentescocatalogoCancer">
+                                            <option value="183">Seleccione el familiar</option>
+                                            @if (ViewBag.TiposParienteAntece != null)
+                                            {
+                                                @foreach (var tipoDocumento in ViewBag.TiposParienteAntece)
+                                                {
+                                                    <option value="@tipoDocumento.IdCatalogo">@tipoDocumento.DescripcionCatalogo</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input placeholder="Observación (Máximo 300 caracteres)" type="text" asp-for="AntecedentesFamiliares.ObserCancer" id="consulta-antecedente-observacion-cancer" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" name="Tuberculosis" type="checkbox" @(Model?.AntecedentesFamiliares.Tuberculosis == true ? "checked" : "") id="consulta-antecedente-checked-tuberculosis">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-tuberculosis">Tuberculosis</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-tuberculosis" style="display: none;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <select class="form-select select2" id="tipoDocumentoSelectTuberculosis" asp-for="AntecedentesFamiliares.ParentescocatalogoTuberculosis">
+                                            <option value="183">Seleccione el familiar</option>
+                                            @if (ViewBag.TiposParienteAntece != null)
+                                            {
+                                                @foreach (var tipoDocumento in ViewBag.TiposParienteAntece)
+                                                {
+                                                    <option value="@tipoDocumento.IdCatalogo">@tipoDocumento.DescripcionCatalogo</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input placeholder="Observación (Máximo 300 caracteres)" type="text" asp-for="AntecedentesFamiliares.ObserTuberculosis" id="consulta-antecedente-observacion-tuberculosis" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" name="EnfMental" @(Model?.AntecedentesFamiliares.EnfMental == true ? "checked" : "") type="checkbox" id="consulta-antecedente-checked-enfmental">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-enfmental">Enfermedad Mental</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-enfmental" style="display: none;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <select class="form-select select2" id="tipoDocumentoSelectEnfMental" asp-for="AntecedentesFamiliares.ParentescocatalogoEnfmental">
+                                            <option value="183">Seleccione el familiar</option>
+                                            @if (ViewBag.TiposParienteAntece != null)
+                                            {
+                                                @foreach (var tipoDocumento in ViewBag.TiposParienteAntece)
+                                                {
+                                                    <option value="@tipoDocumento.IdCatalogo">@tipoDocumento.DescripcionCatalogo</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input placeholder="Observación (Máximo 300 caracteres)" asp-for="AntecedentesFamiliares.ObserEnfMental" type="text" id="consulta-antecedente-observacion-enfmental" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" name="EnfInfecciosa" @(Model?.AntecedentesFamiliares.EnfInfecciosa == true ? "checked" : "") type="checkbox" id="consulta-antecedente-checked-enfinfecciosa">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-enfinfecciosa">Enfermedad Infecciosa</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-enfinfecciosa" style="display: none;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <select class="form-select select2" id="tipoDocumentoSelectEnfInfecciosa" asp-for="AntecedentesFamiliares.ParentescocatalogoEnfinfecciosa">
+                                            <option value="183">Seleccione el familiar</option>
+                                            @if (ViewBag.TiposParienteAntece != null)
+                                            {
+                                                @foreach (var tipoDocumento in ViewBag.TiposParienteAntece)
+                                                {
+                                                    <option value="@tipoDocumento.IdCatalogo">@tipoDocumento.DescripcionCatalogo</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input placeholder="Observación (Máximo 300 caracteres)" asp-for="AntecedentesFamiliares.ObserEnfInfecciosa" type="text" id="consulta-antecedente-observacion-enfinfecciosa" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" type="checkbox" name="MalFormacion" @(Model?.AntecedentesFamiliares.MalFormacion == true ? "checked" : "") id="consulta-antecedente-checked-malformacion">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-malformacion">Mal Formación</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-malformacion" style="display: none;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <select class="form-select select2" id="tipoDocumentoSelectMalFormacion" asp-for="AntecedentesFamiliares.ParentescocatalogoMalformacion">
+                                            <option value="183">Seleccione el familiar</option>
+                                            @if (ViewBag.TiposParienteAntece != null)
+                                            {
+                                                @foreach (var tipoDocumento in ViewBag.TiposParienteAntece)
+                                                {
+                                                    <option value="@tipoDocumento.IdCatalogo">@tipoDocumento.DescripcionCatalogo</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input placeholder="Observación (Máximo 300 caracteres)" type="text" id="consulta-antecedente-observacion-malformacion" asp-for="AntecedentesFamiliares.ObserMalFormacion" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.AntecedentesFamiliares.Otro == true ? "checked" : "") id="consulta-antecedente-checked-otro">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-otro">Otro</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-otro" style="display: none;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <select class="form-select select2" id="tipoDocumentoSelectOtro" asp-for="AntecedentesFamiliares.ParentescocatalogoOtro">
+                                            <option value="183">Seleccione el familiar</option>
+                                            @if (ViewBag.TiposParienteAntece != null)
+                                            {
+                                                @foreach (var tipoDocumento in ViewBag.TiposParienteAntece)
+                                                {
+                                                    <option value="@tipoDocumento.IdCatalogo">@tipoDocumento.DescripcionCatalogo</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input placeholder="Observación (Máximo 300 caracteres)" type="text" asp-for="AntecedentesFamiliares.ObserOtro" id="consulta-antecedente-observacion-otro" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+                <!--Enfermedad problema actual-->
+                <div class="hr-text">
+                    <hr>
+                    <span><i class="fa fa-medkit"></i> Enfermedad o problema actual (*) </span>
+                    <hr>
+                </div>
+
+                <!-- Enfermedad o Problema -->
+                <div class="col-sm-12 position-relative">
+                    <textarea type="text" maxlength="8000" rows="3" class="form-control" asp-for="EnfermedadConsulta" id="enfermedadProblema" placeholder="Coloque una breve descripción, Si desea hablar precione el microfono" required></textarea>
+                    <i id="dictationIcon2" class="fa fa-microphone position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
+                </div>
+
+
+
+
+            </div>
+
+
+            <div class="text-end mt-3">
+
+                <a asp-action="ListarConsultas" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
+
+                <button class="btn btn-outline-primary previousBtn btn-lg" type="button" onclick="goToPreviousStep(1)"><i class="fa fa-arrow-left"></i> Regresar</button>
+                <button class="btn btn-outline-primary nextBtn btn-lg ms-3" type="button" onclick="goToNextStep(3,event)">Siguiente <i class="fa fa-arrow-right"></i></button>
+            </div>
+
+        </div>
+
+        <!--Formulario numero 3-->
+        <div class="setup-content" id="step-3" style="display: none;">
+
+            <div class="hr-text">
+                <hr>
+                <span><i class="fa fa-search"></i> Datos de Contacto</span>
+                <hr>
+
+            </div>
+            <div class="row g-3">
+                <!--Tablas datos-->
+                <div class="one field">
+                    <div class="field">
+                        <table class="ui very basic collapsing celled table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-user"></i>
+                                                <div class="content">
+                                                    <div class="header">Paciente</div>
+                                                    <div class="description" id="pacienteNombreStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-id-card"></i>
+                                                <div class="content">
+                                                    <div class="header">Número de documento</div>
+                                                    <div class="description" id="numeroDocumentoTablaStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-venus-mars"></i>
+                                                <div class="content">
+                                                    <div class="header">Sexo</div>
+                                                    <div class="description" id="sexoTablaStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-tint"></i>
+                                                <div class="content">
+                                                    <div class="header">Tipo de sangre</div>
+                                                    <div class="description" id="tipoSangreTablaStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                <div class="content">
+                                                    <div class="header">Fecha de nacimiento</div>
+                                                    <div class="description" id="fechaNacimientoTablaStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-calendar"></i>
+                                                <div class="content">
+                                                    <div class="header">Edad</div>
+                                                    <div class="description" id="edadTablaStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-id-badge"></i>
+                                                <div class="content">
+                                                    <div class="header">Estado civil</div>
+                                                    <div class="description" id="estadoCivilTablaStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-bookmark"></i>
+                                                <div class="content">
+                                                    <div class="header">Formación profesional</div>
+                                                    <div class="description" id="formacionProfesionalTablaStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-thumbtack"></i>
+                                                <div class="content">
+                                                    <div class="header">Nacionalidad</div>
+                                                    <div class="description" id="nacionalidadTablaStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-phone-square"></i>
+                                                <div class="content">
+                                                    <div class="header">Teléfono</div>
+                                                    <div class="description" id="telefonoTablaStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-mobile-alt"></i>
+                                                <div class="content">
+                                                    <div class="header">Teléfono celular</div>
+                                                    <div class="description" id="telefonoCelularTablaStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-envelope-square"></i>
+                                                <div class="content">
+                                                    <div class="header">Email</div>
+                                                    <div class="description" id="emailTablaStep3">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <!--ORGANOS Y SISTEMAS-->
+                <div class="hr-text">
+                    <hr>
+                    <span><i class="fa fa-stethoscope"></i>Revisión actual de Órganos y sistemas</span>
+                    <hr>
+                </div>
+
+                <div class="container mt-5">
+                    <div class="field">
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.OrganosSistemas?.OrgSentidos == true ? "checked" : "") id="consulta-antecedente-checked-orgsentidos">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-orgsentidos">Órganos de los sentidos</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-orgsentidos" style="display: none;">
+                                <input placeholder="Observación (Máximo 300 caracteres)" asp-for="OrganosSistemas.ObserOrgSentidos" name="ConsultaOrganosSistemas.ObserOrgSentidos" type="text" id="consulta-antecedente-observacion-orgsentidos" class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" @(Model?.OrganosSistemas.Respiratorio == true ? "checked" : "") type="checkbox" id="consulta-antecedente-checked-respiratorio">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-respiratorio">Respiratorio</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-respiratorio" style="display: none;">
+                                <input placeholder="Observación (Máximo 300 caracteres)" asp-for="OrganosSistemas.ObserRespiratorio" name="ConsultaOrganosSistemas.ObserRespiratorio" type="text" id="consulta-antecedente-observacion-respiratorio" class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.OrganosSistemas.CardioVascular == true ? "checked" : "") id="consulta-antecedente-checked-cardiovascular">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-cardiovascular">Cardio Vascular</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-cardiovascular" style="display: none;">
+                                <input placeholder="Observación (Máximo 300 caracteres)" type="text" asp-for="OrganosSistemas.ObserCardioVascular" name="ConsultaOrganosSistemas.ObserCardioVascular" id="consulta-antecedente-observacion-cardiovascular" class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.OrganosSistemas.Digestivo == true ? "checked" : "") id="consulta-antecedente-checked-digestivo">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-digestivo">Digestivo</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-digestivo" style="display: none;">
+                                <input placeholder="Observación (Máximo 300 caracteres)" type="text" id="consulta-antecedente-observacion-digestivo" asp-for="OrganosSistemas.ObserDigestivo" name="ConsultaOrganosSistemas.ObserDigestivo" class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.OrganosSistemas.Genital == true ? "checked" : "") id="consulta-antecedente-checked-genital">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-genital">Genital</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-genital" style="display: none;">
+                                <input placeholder="Observación (Máximo 300 caracteres)" type="text" asp-for="OrganosSistemas.ObserGenital" id="consulta-antecedente-observacion-genital" name="ConsultaOrganosSistemas.ObserGenital" class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.OrganosSistemas.Urinario == true ? "checked" : "") id="consulta-antecedente-checked-urinario">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-urinario">Urinario</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-urinario" style="display: none;">
+                                <input placeholder="Observación (Máximo 300 caracteres)" type="text" id="consulta-antecedente-observacion-urinario" asp-for="OrganosSistemas.ObserUrinario" name="ConsultaOrganosSistemas.ObserUrinario" class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.OrganosSistemas.MEsqueletico == true ? "checked" : "") id="consulta-antecedente-checked-mesqueletico">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-mesqueletico">Músculo Esquelético</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-mesqueletico" style="display: none;">
+                                <input placeholder="Observación (Máximo 300 caracteres)" type="text" asp-for="OrganosSistemas.ObserMEsqueletico" name="ConsultaOrganosSistemas.ObserMEsqueletico" id="consulta-antecedente-observacion-mesqueletico" class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.OrganosSistemas.Endocrino == true ? "checked" : "") id="consulta-antecedente-checked-endocrino">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-endocrino">Endocrino</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-endocrino" style="display: none;">
+                                <input placeholder="Observación (Máximo 300 caracteres)" type="text" asp-for="OrganosSistemas.ObserEndocrino" name="ConsultaOrganosSistemas.ObserEndocrino" id="consulta-antecedente-observacion-endocrino" class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.OrganosSistemas.Linfatico == true ? "checked" : "") id="consulta-antecedente-checked-linfatico">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-linfatico">Hemo Linfático</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-linfatico" style="display: none;">
+                                <input placeholder="Observación (Máximo 300 caracteres)" type="text" id="consulta-antecedente-observacion-linfatico" asp-for="OrganosSistemas.ObserLinfatico" name="ConsultaOrganosSistemas.ObserLinfatico" class="form-control" disabled>
+                            </div>
+                        </div>
+
+                        <div class="fields">
+                            <div class="col-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.OrganosSistemas.Nervioso == true ? "checked" : "") id="consulta-antecedente-checked-nervioso">
+                                    <label class="form-check-label" for="consulta-antecedente-checked-nervioso">Nervioso</label>
+                                </div>
+                            </div>
+                            <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-nervioso" style="display: none;">
+                                <input placeholder="Observación (Máximo 300 caracteres)" type="text" id="consulta-antecedente-observacion-nervioso" asp-for="OrganosSistemas.ObserNervioso" name="ConsultaOrganosSistemas.ObserNervioso" class="form-control" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Antropometria-->
+                <div class="hr-text">
+                    <hr>
+                    <span><i class="fa fa-stethoscope"></i>Signos vitales y antropometría</span>
+                    <hr>
+                </div>
+
+                <div class="alert alert-primary d-flex align-items-center" role="alert">
+
+                    <div>
+                        <div class="fw-bold">Separador decimal<i class="fas fa-calculator me-12"></i></div>
+                        Debes usar el caracter <span style="font-size: 30px;">,</span> para separar decimales
+                    </div>
+                </div>
+
+
+                <div class="container mt-5">
+                    <div class="row g-12">
+                        <!-- Temperatura -->
+                        <div class="col-md-3">
+                            <label for="temperatura_consulta" class="form-label text-end">Temperatura ºC *</label>
+                            <input id="temperatura_consulta" max="100" min="0" style="max-width: 100%" name="Temperatura" asp-for="Temperatura" placeholder="0" type="text" class="form-control" required>
+                        </div>
+
+                        <!-- Frecuencia respiratoria -->
+                        <div class="col-md-3">
+                            <label for="frecuenciarespiratoria_consulta" class="form-label text-end">Frecuencia respiratoria *</label>
+                            <input id="frecuenciarespiratoria_consulta" max="10000" asp-for="FrecuenciaRespiratoria" min="0" name="FrecuenciaRespiratoria" placeholder="0" type="text" required class="form-control">
+                            <span asp-validation-for="FrecuenciaRespiratoria"></span>
+                        </div>
+
+                        <!-- Presión arterial -->
+                        <div class="col-md-3">
+                            <label for="presionArterial" class="form-label text-end">Presión arterial *</label>
+                            <input id="presionArterial" name="PresionArterial" style="max-width: 100%" placeholder="0" type="text" class="form-control" required>
+                            <div id="camp" class="form-text">
+                                Si la presión es de dos cifras, anteceda el 0 antes del número. Ej: 046/123 siempre colocar como el ejemplo
+                            </div>
+                            <input type="hidden" asp-for="PresionArterialDiastolica" name="PresionArterialDiastolica" id="PresionarterialdiastolicaConsulta" />
+                            <input type="hidden" asp-for="PresionArterialSistolica" name="PresionArterialSistolica" id="PresionarterialsistolicaConsulta" />
+                        </div>
+
+                        <!-- Pulso por minuto -->
+                        <div class="col-md-2">
+                            <label for="pulso_consulta" class="form-label text-end">Pulso por minuto *</label>
+                            <input id="pulso_consulta" max="1000" min="0" name="Pulso" asp-for="Pulso" placeholder="0" type="text" class="form-control" required>
+                            <span asp-validation-for="Pulso"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="row g-3 mt-3">
+                        <!-- Peso -->
+                        <div class="col-md-3">
+                            <label for="peso_consulta" class="form-label text-end">Peso *</label>
+                            <input id="peso_consulta" max="1000" min="0" style="max-width: 100%" name="Peso" placeholder="0" type="text" asp-for="Peso" class="form-control" required>
+                            <small class="form-text">(Kg)</small>
+                            <span asp-validation-for="Peso"></span>
+                        </div>
+
+                        <!-- Talla -->
+                        <div class="col-md-3">
+                            <label for="talla_consulta" class="form-label text-end">Talla *</label>
+                            <input id="talla_consulta" max="1000" min="0" name="Talla" placeholder="0" type="text" asp-for="Talla" class="form-control" required>
+                            <small class="form-text">(cm)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Examen Fisico-->
+                <div class="hr-text">
+                    <hr>
+                    <span><i class="fa fa-stethoscope"></i>Examen físico regional</span>
+                    <hr>
+                </div>
+
+                <div class="fields">
+                    <div class="col-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.ExamenFisico.Cabeza == true ? "checked" : "") id="consulta-antecedente-checked-cabeza">
+                            <label class="form-check-label" for="consulta-antecedente-checked-cabeza">Cabeza</label>
+                        </div>
+                    </div>
+                    <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-cabeza" style="display: none;">
+                        <input placeholder="Observación (Máximo 300 caracteres)" type="text" id="consulta-antecedente-observacion-cabeza" asp-for="ExamenFisico.ObserCabeza" class="form-control" disabled>
+                    </div>
+                </div>
+
+                <div class="fields">
+                    <div class="col-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.ExamenFisico.Cuello == true ? "checked" : "") id="consulta-antecedente-checked-cuello">
+                            <label class="form-check-label" for="consulta-antecedente-checked-cuello">Cuello</label>
+                        </div>
+                    </div>
+                    <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-cuello" style="display: none;">
+                        <input placeholder="Observación (Máximo 300 caracteres)" type="text" id="consulta-antecedente-observacion-cuello" asp-for="ExamenFisico.ObserCuello" class="form-control" disabled>
+                    </div>
+                </div>
+
+                <div class="fields">
+                    <div class="col-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.ExamenFisico.Torax == true ? "checked" : "") id="consulta-antecedente-checked-torax">
+                            <label class="form-check-label" for="consulta-antecedente-checked-torax">Tórax</label>
+                        </div>
+                    </div>
+                    <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-torax" style="display: none;">
+                        <input placeholder="Observación (Máximo 300 caracteres)" type="text" id="consulta-antecedente-observacion-torax" asp-for="ExamenFisico.ObserTorax" class="form-control" disabled>
+                    </div>
+                </div>
+
+                <div class="fields">
+                    <div class="col-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.ExamenFisico.Abdomen == true ? "checked" : "") id="consulta-antecedente-checked-abdomen">
+                            <label class="form-check-label" for="consulta-antecedente-checked-abdomen">Abdomen</label>
+                        </div>
+                    </div>
+                    <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-abdomen" style="display: none;">
+                        <input placeholder="Observación (Máximo 300 caracteres)" type="text" id="consulta-antecedente-observacion-abdomen" asp-for="ExamenFisico.ObserAbdomen" class="form-control" disabled>
+                    </div>
+                </div>
+
+                <div class="fields">
+                    <div class="col-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.ExamenFisico.Pelvis == true ? "checked" : "") id="consulta-antecedente-checked-pelvis">
+                            <label class="form-check-label" for="consulta-antecedente-checked-pelvis">Pelvis</label>
+                        </div>
+                    </div>
+                    <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-pelvis" style="display: none;">
+                        <input placeholder="Observación (Máximo 300 caracteres)" type="text" id="consulta-antecedente-observacion-pelvis" asp-for="ExamenFisico.ObserPelvis" class="form-control" disabled>
+                    </div>
+                </div>
+
+                <div class="fields">
+                    <div class="col-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input consulta-antecedente-checked" type="checkbox" @(Model?.ExamenFisico.Extremidades == true ? "checked" : "") id="consulta-antecedente-checked-extremidades">
+                            <label class="form-check-label" for="consulta-antecedente-checked-extremidades">Extremidades</label>
+                        </div>
+                    </div>
+                    <div class="col-12 consulta-antecedente-observacion" id="consulta-observacion-extremidades" style="display: none;">
+                        <input placeholder="Observación (Máximo 300 caracteres)" type="text" id="consulta-antecedente-observacion-extremidades" asp-for="ExamenFisico.ObserExtremidades" class="form-control" disabled>
+                    </div>
+                </div>
+
+
+                <div class="text-end mt-3">
+                    <a asp-action="ListarConsultas" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
+
+                    <button class="btn btn-outline-primary previousBtn btn-lg" type="button" onclick="goToPreviousStep(2)"><i class="fa fa-arrow-left"></i> Regresar</button>
+                    <button class="btn btn-outline-primary nextBtn btn-lg ms-3" type="button" onclick="goToNextStep(4,event)">Siguiente <i class="fa fa-arrow-right"></i></button>
+                </div>
+
+            </div>
+        </div>
+
+        <!--Formulario numero 4-->
+        <div class="setup-content" id="step-4" style="display: none;">
+
+            <div class="hr-text">
+                <hr>
+                <span><i class="fa fa-search"></i> Datos de Contacto</span>
+                <hr>
+
+            </div>
+
+            <div class="row g-3">
+                <!--Tablas de datos-->
+                <div class="one field">
+                    <div class="field">
+                        <table class="ui very basic collapsing celled table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-user"></i>
+                                                <div class="content">
+                                                    <div class="header">Paciente</div>
+                                                    <div class="description" id="pacienteNombreStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-id-card"></i>
+                                                <div class="content">
+                                                    <div class="header">Número de documento</div>
+                                                    <div class="description" id="numeroDocumentoTablaStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-venus-mars"></i>
+                                                <div class="content">
+                                                    <div class="header">Sexo</div>
+                                                    <div class="description" id="sexoTablaStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-tint"></i>
+                                                <div class="content">
+                                                    <div class="header">Tipo de sangre</div>
+                                                    <div class="description" id="tipoSangreTablaStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                <div class="content">
+                                                    <div class="header">Fecha de nacimiento</div>
+                                                    <div class="description" id="fechaNacimientoTablaStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-calendar"></i>
+                                                <div class="content">
+                                                    <div class="header">Edad</div>
+                                                    <div class="description" id="edadTablaStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-id-badge"></i>
+                                                <div class="content">
+                                                    <div class="header">Estado civil</div>
+                                                    <div class="description" id="estadoCivilTablaStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-bookmark"></i>
+                                                <div class="content">
+                                                    <div class="header">Formación profesional</div>
+                                                    <div class="description" id="formacionProfesionalTablaStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-thumbtack"></i>
+                                                <div class="content">
+                                                    <div class="header">Nacionalidad</div>
+                                                    <div class="description" id="nacionalidadTablaStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-phone-square"></i>
+                                                <div class="content">
+                                                    <div class="header">Teléfono</div>
+                                                    <div class="description" id="telefonoTablaStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-mobile-alt"></i>
+                                                <div class="content">
+                                                    <div class="header">Teléfono celular</div>
+                                                    <div class="description" id="telefonoCelularTablaStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ui list">
+                                            <a class="item">
+                                                <i class="fas fa-envelope-square"></i>
+                                                <div class="content">
+                                                    <div class="header">Email</div>
+                                                    <div class="description" id="emailTablaStep4">Sin especificar</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Diagnóstico -->
+                <div class="card">
+                    <div class="card-header">Diagnóstico</div>
+                    <div class="card-body">
+                        <div class="input-group">
+
+                            <select class="form-select select2" id="DiagnosticoId">
+                                <option value="">Seleccione...</option>
+                                @if (ViewBag.TiposDiagnostico != null)
+                                {
+                                    @foreach (var tiposDiagnostico in ViewBag.TiposDiagnostico)
+                                    {
+                                        <option value="@tiposDiagnostico.IdDiagnostico">@tiposDiagnostico.NombreDiagnostico</option>
+                                    }
+                                }
+                            </select>
+
+
+
+                            <button type="button" class="btn btn-outline-success" id="anadirFila"><i class="fas fa-plus-circle"></i> Añadir</button>
+                        </div>
+
+                        <table class="table" id="diagnosticoTable">
+                            <thead>
+                                <tr>
+                                    <th class="col-6">Diagnóstico</th>
+                                    <th class="col-3">Presuntivo/Definitivo</th>
+                                    <th class="col-3">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="diagnosticoTableBody">
+                                <!-- Aquí se añadirán dinámicamente las filas -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Plan tratamiento -->
+                <div class="card">
+                    <div class="card-header">Planes de tratamiento</div>
+                    <div class="card-body position-relative">
+                        <div class="form-group">
+                            <label for="plantratamiento_consulta">Planes de tratamiento *</label>
+                            <textarea id="plantratamiento_consulta" asp-for="PlanTratamiento" maxlength="8000" name="PlanTratamiento" placeholder="Coloque una breve descripción, Si desea hablar precione el microfono" rows="4" class="form-control" required></textarea>
+                            <i id="dictationIconPlan" class="fa fa-microphone position-absolute" style="top: 60px; right: 15px; cursor: pointer;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Medicamentos-->
+                <div class="card">
+                    <div class="card-header">Medicamentos</div>
+                    <div class="card-body">
+                        <div class="input-group">
+                            <select class="form-select select2" id="MedicamentoId">
+                                <option value="">Seleccione...</option>
+                                @if (ViewBag.TiposMedicamentos != null)
+                                {
+                                    @foreach (var tiposMedicamento in ViewBag.TiposMedicamentos)
+                                    {
+                                        <option value="@tiposMedicamento.IdMedicamento">@tiposMedicamento.NombreMedicamento</option>
+                                    }
+                                }
+                            </select>
+                            <button type="button" class="btn btn-outline-success" id="anadirFilaMedicamento"><i class="fas fa-plus-circle"></i> Añadir</button>
+                        </div>
+
+                        <table class="table" id="medicamentosTable">
+                            <thead>
+                                <tr>
+                                    <th class="col-6">Medicamento</th>
+                                    <th class="col-2">Cantidad</th>
+                                    <th class="col-6">Observación</th>
+                                    <th class="col-2">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="medicamentosTableBody">
+                                <!-- Aquí se añadirán dinámicamente las filas -->
+                            </tbody>
+                        </table>
+
+
+                        <!-- Recomendaciones no farmacologicas -->
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group position-relative">
+                                    <label for="reconofarmacologicas">Recomendaciones no farmacológicas</label>
+                                    <textarea id="reconofarmacologicas" maxlength="8000" asp-for="ReconocimientoFarmacologico" name="ReconocFarmacologicas" class="form-control" placeholder="Coloque una breve descripción, Si desea hablar precione el microfono"></textarea>
+                                    <i id="dictationIconReconofarmacologicas" class="fa fa-microphone position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Signos de alarma -->
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group position-relative">
+                                    <label for="alergias_consulta">Signos de alarma</label>
+                                    <textarea id="signosAlarma" maxlength="8000" asp-for="SignosAlarma" name="SignosAlarma" class="form-control" placeholder="Coloque una breve descripción, Si desea hablar precione el microfono"></textarea>
+                                    <i id="dictationIconSignosAlarma" class="fa fa-microphone position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- Imágenes -->
+                <div class="card">
+                    <div class="card-header">Imágenes (Exámenes)</div>
+                    <div class="card-body">
+                        <div class="input-group">
+                            <select class="form-select select2" id="ImagenId">
+                                <option value="">Seleccione...</option>
+                                @if (ViewBag.TiposImagen != null)
+                                {
+                                    @foreach (var tiposImagen in ViewBag.TiposImagen)
+                                    {
+                                        <option value="@tiposImagen.IdImagen">@tiposImagen.NombreImagen</option>
+                                    }
+                                }
+                            </select>
+                            <button type="button" class="btn btn-outline-success" id="anadirFilaImagen"><i class="fas fa-plus-circle"></i> Añadir</button>
+                        </div>
+
+                        <table class="table" id="imagenesTable">
+                            <thead>
+                                <tr>
+                                    <th>Imagen (Exámen)</th>
+                                    <th>Cantidad</th>
+                                    <th>Observación</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="imagenesTableBody">
+                                <!-- Aquí se añadirán dinámicamente las filas -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Laboratorios -->
+                <div class="card">
+                    <div class="card-header">Laboratorios</div>
+                    <div class="card-body">
+                        <div class="input-group"> 
+                            <select class="form-select select2" id="LaboratorioId">
+                                <option value="">Seleccione...</option>
+                                @if (ViewBag.TiposLaboratorios != null)
+                                {
+                                    @foreach (var tiposLaboratorio in ViewBag.TiposLaboratorios)
+                                    {
+                                        <option value="@tiposLaboratorio.IdLaboratorio">@tiposLaboratorio.NombreLaboratorio</option>
+                                    }
+                                }
+                            </select>
+                            <button type="button" class="btn btn-outline-success" id="anadirFilaLaboratorio"><i class="fas fa-plus-circle"></i> Añadir</button>
+                        </div>
+
+                        <table class="table" id="laboratorioTable">
+                            <thead>
+                                <tr>
+                                    <th class="col-6">Laboratorio</th>
+                                    <th class="col-2">Cantidad</th>
+                                    <th class="col-6">Observación</th>
+                                    <th class="col-2">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="laboratorioTableBody">
+                                <!-- Aquí se añadirán dinámicamente las filas -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--Dias de incapacidad-->
+                <div class="card">
+                    <div class="card-header">Días de Incapacidad</div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="consulta-diagnostico-dias-incapacidad">Días de incapacidad</label>
+                                <input id="diasincapacidad_consulta" max="10000" asp-for="DiasIncapacidad" min="0" name="DiasIncapacidad" placeholder="0" type="number" value="0" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Observaciones Finales</div>
+                    <div class="card-body position-relative">
+                        <div class="form-group">
+                            <label for="consulta-diagnostico-observaciones">Observaciones finales</label>
+                            <textarea id="observacion_consulta" maxlength="8000" asp-for="Observacion" name="Observacion" placeholder="Máximo 8000 caracteres" rows="4" class="form-control"></textarea>
+                            <i id="dictationIconObservacion" class="fa fa-microphone position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <a asp-action="ListarConsultas" asp-controller="Consultation" class="btn btn-outline-danger"><i class="fa fa-close"></i> Salir</a>
+                <button class="btn btn-outline-primary previousBtn btn-lg" type="button" onclick="goToPreviousStep(3)"><i class="fa fa-arrow-left"></i> Regresar</button>
+
+                <button type="submit" class="btn btn-outline-primary"><i class="fa fa-save"></i> Guardar Consulta</button>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        var consultaUrl = '@Url.Action("CrearConsulta", "Consultation")';
+        var redirectur = '@Url.Action("ListarConsultas", "Consultation")';
+
+
+        $(document).ready(function () {
+           
+         
+            $('#DiagnosticoSearch').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/Consultation/BuscarDiagnosticos',
+                        data: { searchTerm: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.NombreDiagnostico,
+                                    value: item.IdDiagnostico
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2, // Inicia la búsqueda a partir de 2 caracteres
+                select: function (event, ui) {
+                    // Establecer el valor seleccionado en el campo oculto
+                    $('#DiagnosticoId').val(ui.item.value);
+                }
+            });
+        });
+
+    </script>
+    <script src="~/js/searchConsultationFunctions.js"></script>
+
+
+
+}
+

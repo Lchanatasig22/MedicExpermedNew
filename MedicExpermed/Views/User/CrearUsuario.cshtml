@@ -1,0 +1,201 @@
+﻿@model Usuario
+@{
+    ViewData["Title"] = "CrearUsuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>Crear Usuario</h1>
+
+<br />
+
+<form asp-action="CrearUsuario" method="post" enctype="multipart/form-data">
+
+    <div class="form-group row g-3">
+       
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="PerfilId">Rol Usuario</label>
+            <select asp-for="PerfilId" class="form-select">
+                <option value="">Seleccione</option>
+                @foreach (var perfil in ViewBag.Perfiles)
+                {
+                    <option value="@perfil.IdPerfil">@perfil.NombrePerfil</option>
+                }
+            </select>
+            <span asp-validation-for="PerfilId" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="CiUsuario">Número de Documento</label>
+            <input asp-for="CiUsuario" class="form-control" />
+            <span asp-validation-for="CiUsuario" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="ApellidosUsuario">Apellidos</label>
+            <input asp-for="ApellidosUsuario" class="form-control" />
+            <span asp-validation-for="ApellidosUsuario" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="NombresUsuario">Nombres</label>
+            <input asp-for="NombresUsuario" class="form-control" />
+            <span asp-validation-for="NombresUsuario" class="text-danger"></span>
+        </div>
+
+
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="DireccionUsuario">Dirección Usuario</label>
+            <input asp-for="DireccionUsuario" class="form-control" />
+            <span asp-validation-for="DireccionUsuario" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="CodigoSenecyt">Codigo Senecyt</label>
+            <input class="form-control" type="text" asp-for="CodigoSenecyt" />
+            <span class="text-danger" asp-validation-for="CodigoSenecyt"></span>
+        </div>
+
+   
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="TelefonoUsuario">Teléfono</label>
+            <input asp-for="TelefonoUsuario" class="form-control" />
+            <span asp-validation-for="TelefonoUsuario" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="EmailUsuario">Email</label>
+            <input asp-for="EmailUsuario" class="form-control" type="email" />
+            <span asp-validation-for="EmailUsuario" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="EspecialidadId">Especialidad</label>
+            <select asp-for="EspecialidadId" class="form-select">
+                <option value="">Seleccione</option>
+                @foreach (var especialidad in ViewBag.Especialidades)
+                {
+                    <option value="@especialidad.IdEspecialidad">@especialidad.NombreEspecialidad</option>
+                }
+            </select>
+            <span asp-validation-for="EspecialidadId" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="EstablecimientoId">Establecimiento</label>
+            <select asp-for="EstablecimientoId" class="form-select">
+                <option value="">Seleccione</option>
+                @foreach (var establecimiento in ViewBag.Establecimientos)
+                {
+                    <option value="@establecimiento.IdEstablecimiento">@establecimiento.DescripcionEstablecimiento</option>
+                }
+            </select>
+            <span asp-validation-for="EstablecimientoId" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="LoginUsuario">Login</label>
+            <input asp-for="LoginUsuario" class="form-control" />
+            <span asp-validation-for="LoginUsuario" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="ClaveUsuario">Clave</label>
+            <input asp-for="ClaveUsuario" class="form-control" />
+            <span asp-validation-for="ClaveUsuario" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-3 d-none">
+            <label class="form-label" asp-for="EstadoUsuario">Activo</label>
+            <input asp-for="EstadoUsuario" value="1" class="form-control" readonly />
+            <span asp-validation-for="EstadoUsuario" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-3">
+            <label class="form-label" asp-for="CodigoUsuario">Código</label>
+            <input asp-for="CodigoUsuario" class="form-control" />
+@*             <span asp-validation-for="CodigoUsuario" class="text-danger"></span> *@
+        </div>
+
+        <div class="col-sm-3">
+            <label asp-for="CodigoqrUsuario" class="form-label">Código QR</label>
+            <input class="form-control" asp-for="CodigoqrUsuario" type="file" id="codigoqr_usuario" accept=".jpeg,.jpg,.png">
+            <img id="previewCodigoqr" src="#" alt="Vista previa Código QR" class="img-thumbnail mt-2" style="display:none; max-width: 100px;" />
+            <span class="text-danger" asp-validation-for="CodigoqrUsuario"></span>
+        </div>
+
+        <div class="col-sm-3">
+            <label asp-for="FirmadigitalUsuario" class="form-label">Firma Electrónica</label>
+            <input class="form-control" asp-for="FirmadigitalUsuario" type="file" id="firmadigital_usuario" accept=".jpeg,.jpg,.png">
+            <img id="previewFirma" src="#" alt="Vista previa Firma" class="img-thumbnail mt-2" style="display:none; max-width: 100px; max-height: 100px " />
+            <span class="text-danger" asp-validation-for="FirmadigitalUsuario"></span>
+        </div>
+    </div>
+    <br />
+
+    <div id="camp">
+      Todos los campos son obligatorios
+    </div>
+    <br />
+
+    <div class="form-group">
+        <div class="btn-group">
+            <button type="submit" class="btn btn-outline-primary" style="border-radius:15px"> <i class="fa fa-plus"></i>  Crear</button>
+
+            <a asp-action="ListarUsuarios" class="btn btn-outline-warning" style="margin-left:5px; border-radius: 15px"> <i class=" fa fa-undo"></i>  Volver a la lista</a>
+        </div>
+    </div>
+ 
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            // Mostrar mensajes de éxito o error
+            var successMessage = '@TempData["SuccessMessage"]';
+            var errorMessage = '@TempData["ErrorMessage"]';
+
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: successMessage
+                });
+            }
+
+            if (errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorMessage
+                });
+            }
+
+            // Función para mostrar la vista previa de la imagen
+            function readURL(input, previewId) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $(previewId).attr('src', e.target.result);
+                        $(previewId).show();
+                    }
+
+                    reader.readAsDataURL(input.files[0]); // Convierte la imagen a una URL base64
+                }
+            }
+
+            // Asocia la función de vista previa a los campos de archivo
+            $("#codigoqr_usuario").change(function () {
+                readURL(this, '#previewCodigoqr');
+            });
+
+            $("#firmadigital_usuario").change(function () {
+                readURL(this, '#previewFirma');
+            });
+        });
+    </script>
+}
+

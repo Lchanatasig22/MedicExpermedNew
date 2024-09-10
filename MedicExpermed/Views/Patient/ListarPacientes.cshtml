@@ -1,0 +1,166 @@
+﻿@model List<Paciente>
+@{
+    ViewData["Title"] = "ListarPacientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>PACIENTES REGISTRADOS</h1>
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="opcion">Buscar por</label>
+            <select class="form-control" id="opcion" onchange="onSearchChanged()">
+                <option value="-2">Listar todo</option>
+                <option value="1">Nombre(s)</option>
+                <option value="2">Número de documento</option>
+                <option value="3">Email</option>
+                <option value="4">Nacionalidad</option>
+            </select>
+        </div>
+        <div class="col-md-5 d-none" id="buscarFields">
+            <label>&nbsp;</label>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Ingresar criterio de búsqueda" id="buscarCriterio" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onclick="onSearch()">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="table-responsive-sm d-none d-lg-block">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="table-primary">
+                <th>Acciones</th>
+                <th>Nombre</th>
+                <th>Número de Documento</th>
+                <th>Email</th>
+                <th>Fecha Nacimiento</th>
+                <th>Edad</th>
+                <th>Nacionalidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var paciente in Model)
+            {
+                <tr id="paciente-@paciente.IdPacientes">
+                    <td>
+                        <a asp-action="EditarPaciente" asp-route-id="@paciente.IdPacientes" class="btn btn-outline-primary">
+                            <i class="fa-regular fa-pen-to-square"></i> Revisar
+                        </a>
+                        <button type="button" class="btn btn-outline-danger" onclick="confirmarEliminar('@paciente.IdPacientes')">
+                            <i class="fa-solid fa-trash"></i> Eliminar
+                        </button>
+                    </td>
+                    <td data-search-type="1">@paciente.PrimernombrePacientes @paciente.PrimerapellidoPacientes</td>
+                    <td data-search-type="2">@paciente.CiPacientes</td>
+                    <td data-search-type="3">@paciente.EmailPacientes</td>
+                    <td>@paciente.FechanacimientoPacientes?.ToString("dd/MM/yyyy")</td>
+                    <td>@paciente.EdadPacientes</td>
+                    <td data-search-type="4">@paciente.NacionalidadPacientesPaNavigation.GentilicioPais</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="card-columns d-lg-none">
+    @foreach (var paciente in Model)
+    {
+        <div class="card">
+            <div class="card-body" data-id="@paciente.IdPacientes">
+                <h5 class="card-title" data-search-type="1">@paciente.PrimernombrePacientes @paciente.PrimerapellidoPacientes</h5>
+                <p class="card-text" data-search-type="2"><strong>Número de Documento:</strong> @paciente.CiPacientes</p>
+                <p class="card-text" data-search-type="3"><strong>Email:</strong> @paciente.EmailPacientes</p>
+                <p class="card-text"><strong>Fecha Nacimiento:</strong> @paciente.FechanacimientoPacientes?.ToString("dd/MM/yyyy")</p>
+                <p class="card-text"><strong>Edad:</strong> @paciente.EdadPacientes</p>
+                <p class="card-text" data-search-type="4"><strong>Nacionalidad:</strong> @paciente.NacionalidadPacientesPaNavigation.GentilicioPais</p>
+                <a asp-action="EditarPaciente" asp-route-id="@paciente.IdPacientes" class="btn btn-outline-primary btn-sm">
+                    <i class="fa-regular fa-pen-to-square"></i> Revisar
+                </a>
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmarEliminar('@paciente.IdPacientes')">
+                    <i class="fa-solid fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="noResults" class="no-results d-none">
+    No se encontraron resultados.
+   
+</div>
+
+<a asp-action="CrearPaciente" class="btn btn-outline-primary" style="margin-left:80%">
+    <i class="fa fa-plus"></i> Añadir nuevo paciente
+</a>
+
+@section Scripts {
+    <script src="~/js/patientSearchFunctions.js"></script>
+    <script>
+        // Mostrar mensajes de éxito o error
+        var successMessage = '@TempData["SuccessMessage"]';
+        var errorMessage = '@TempData["ErrorMessage"]';
+
+        if (successMessage) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: successMessage
+            });
+        }
+
+        if (errorMessage) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage
+            });
+        }
+
+
+
+        window.confirmarEliminar = function (id) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción no se puede deshacer.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    eliminarPaciente(id);
+                }
+            });
+        };
+
+        function eliminarPaciente(id) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = '@Url.Action("DeletePatient", "Patient")';
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'id';
+            input.value = id;
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+
+
+
+
+    
+    </script>
+}
+

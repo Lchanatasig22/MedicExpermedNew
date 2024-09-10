@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ @using Microsoft.AspNetCore.Http
+@{
+    var perfilId = ViewContext.HttpContext.Session.GetInt32("UsuarioId");
+    var usuarioNombre = ViewContext.HttpContext.Session.GetString("UsuarioNombre");
+    var usuarioApellido = ViewContext.HttpContext.Session.GetString("UsuarioApellido");
+    var usuarioEspecialidad = ViewContext.HttpContext.Session.GetString("UsuarioEspecialidad");
+}
+
+<main>
+
+
+ 
+    <div class="header-container">
+        <h1>Sistema de consultas médicas</h1>
+        <h2>Bienvenido Dr(a): @usuarioNombre @usuarioApellido
+    </div>
+
+    <div class="card mb-3" style="display: flex; justify-content: space-between;">
+        <div class="row g-0" style="flex: 1;">
+            <div class="col-md-6" *ngIf="agenda.length == 0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        No hay citas programadas para hoy
+                    </h5>
+                    <a class="btn btn-outline-primary" href="@Url.Action("ListarPacientes", "Patient")">
+                        <i class="fa fa-plus"></i>
+                        Agendar nueva cita
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <p>Más acciones</p>
+                <div class="btn-group">
+                    <a class="btn btn-secondary" href="@Url.Action("ListarCitas", "Appointment")">
+                        <i class="far fa-calendar-check"></i>
+                        Consultar citas
+                    </a>
+
+                    <div class="btn btn-light">o</div>
+                    <a class="btn btn-secondary" href="@Url.Action("CrearConsulta", "Consultation")">
+                        <i class="fa fa-user-md "></i>
+                        Generar una consulta
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="divider">
+        </div>
+    </div>
+
+</main>

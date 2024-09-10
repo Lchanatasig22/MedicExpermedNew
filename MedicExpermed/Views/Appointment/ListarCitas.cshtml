@@ -1,0 +1,122 @@
+﻿@model List<Citum>
+@{
+    ViewData["Title"] = "ListarCitas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>LISTADO DE CITAS</h1>
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="opcion">Buscar por</label>
+            <select class="form-control" id="opcionCitas">
+                <option value="-2">Listar todo</option>
+                <option value="1">Nombre(s) Paciente</option>
+                <option value="2">Fecha de la Cita</option>
+                <option value="3">Médico</option>
+                <option value="4">Especialidad</option>
+            </select>
+        </div>
+        <div class="col-md-5 d-none" id="buscarFieldsCitas">
+            <label>&nbsp;</label>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Ingresar criterio de búsqueda" id="buscarCriterioCitas" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onclick="onSearch('citas')">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="table-responsive d-none d-lg-block">
+    <table class="table table-bordered table-striped table-sm">
+        <thead>
+            <tr class="table-primary">
+                <th>Acciones</th>
+                <th>Fecha de la Cita</th>
+                <th>Nombre Paciente</th>
+                <th>Motivo</th>
+                <th class="d-none d-md-table-cell">Especialidad</th>
+                <th>Estado</th>
+                <th>Pago</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cita in Model)
+            {
+                <tr id="cita-@cita.IdCita" data-type="citas">
+                    <td>
+                        <a asp-action="ActualizarCita" asp-route-id="@cita.IdCita" class="btn btn-outline-primary btn-sm">
+                            <i class="fa-regular fa-pen-to-square"></i> Revisar
+                        </a>
+                        <form id="eliminarCitaForm-@cita.IdCita" asp-action="CancelarCita" asp-route-id="@cita.IdCita" method="post" style="display:inline;">
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmarEliminarCita(@cita.IdCita)">
+                                <i class="fa-solid fa-trash"></i> Eliminar
+                            </button>
+                        </form>
+                    </td>
+                    <td data-search-type="2">@cita.FechadelacitaCita?.ToString("dd/MM/yyyy") - @cita.HoradelacitaCita</td>
+                    <td data-search-type="1">@cita.Paciente.PrimernombrePacientes @cita.Paciente.PrimerapellidoPacientes</td>
+                    <td>@cita.Motivo</td>
+                    <td data-search-type="4">@ViewBag.UsuarioEspecialidad</td>
+                    <td>
+                        @if (cita.EstadoCita == 1)
+                        {
+                            @:Activo
+                        }
+                        else
+                        {
+                            @:Inactivo
+                        }
+                    </td>
+
+                    <td class="d-none d-md-table-cell">
+                        <a asp-action="Billing" asp-route-id="@cita.IdCita" asp-controller="Billing" class="btn btn-outline-success btn-sm">
+                            <i class="fa-solid fa-money-bill"></i> Generar pago
+                        </a>
+                    </td>
+                  
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="card-columns d-lg-none">
+    @foreach (var cita in Model)
+    {
+        <div class="card" data-type="citas">
+            <div class="card-body" data-id="@cita.IdCita">
+                <h5 class="card-title" data-search-type="1">@cita.Paciente.PrimernombrePacientes @cita.Paciente.PrimerapellidoPacientes</h5>
+                <p class="card-text" data-search-type="2"><strong>Fecha de la Cita:</strong> @cita.FechadelacitaCita?.ToString("dd/MM/yyyy") - @cita.HoradelacitaCita</p>
+                <p class="card-text"><strong>Motivo:</strong> @(cita.Motivo ?? "No disponible")</p>
+                <p class="card-text" data-search-type="4"><strong>Especialidad:</strong> @ViewBag.UsuarioEspecialidad</p>
+                <a asp-action="ActualizarCita" asp-route-id="@cita.IdCita" class="btn btn-outline-primary btn-sm">
+                    <i class="fa-regular fa-pen-to-square"></i> Revisar
+                </a>
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmarEliminarCita(@cita.IdCita)">
+                    <i class="fa-solid fa-trash"></i> Eliminar
+                </button>
+                <p class="card-text"><strong>Estado:</strong> @(cita.EstadoCita ?? 0)</p>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="noResultsCitas" class="no-results d-none">
+    No se encontraron resultados.
+</div>
+
+<a asp-action="ListarPacientes" asp-controller="Patient" class="btn btn-outline-primary">
+    <i class="fa fa-plus"></i> Añadir nueva cita
+</a>
+
+@section Scripts {
+    <script src="~/js/appointmentSearchFunctions.js"></script>
+}
+

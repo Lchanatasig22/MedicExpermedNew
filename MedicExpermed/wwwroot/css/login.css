@@ -1,0 +1,178 @@
+﻿/* wwwroot/css/login.css */
+
+/* Reset y configuración base */
+*,
+::after,
+::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    outline: none;
+    color: #333333; /* Gris Oscuro */
+    transition: color 0.3s ease;
+}
+
+    a:hover {
+        color: #6CE1CA; /* Verde Menta */
+    }
+
+ul {
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+ol, ul {
+    margin: 0;
+    padding: 0;
+}
+
+a:hover,
+a:focus,
+input,
+textarea {
+    text-decoration: none;
+    outline: none;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+}
+
+.form-02-main {
+    background: url('/images/doctor-with-stethoscope-hands-hospital-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-03-main {
+    width: 400px;
+    padding: 30px 40px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.logo {
+    margin-bottom: 20px;
+}
+
+    .logo img {
+        width: 50px;
+    }
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+    .form-group input {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+        .form-group input:focus {
+            border-color: #1A6EBB; /* Azul Oscuro */
+            box-shadow: 0 0 10px rgba(26, 110, 187, 0.2);
+        }
+
+    .form-group button {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 25px;
+        background: #1A6EBB; /* Azul Oscuro */
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+        .form-group button:hover {
+            background: #00A7E1; /* Azul Claro */
+            transform: scale(1.05);
+        }
+
+    .form-group p {
+        color: red;
+        margin-top: 10px;
+    }
+
+.loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+    .loading-overlay .spinner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .loading-overlay .spinner i {
+            font-size: 50px;
+            color: #1A6EBB; /* Azul Oscuro */
+            animation: heartbeat 2.5s infinite, spin 2s linear infinite;
+        }
+
+        .loading-overlay .spinner p {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #1A6EBB; /* Azul Oscuro */
+        }
+
+/* Login */
+@media screen and (max-width: 600px) {
+    .form-03-main {
+        width: 100%;
+    }
+}
+
+@keyframes heartbeat {
+    0%, 20%, 40%, 60%, 80%, 100% {
+        transform: scale(1);
+    }
+
+    10%, 30%, 50%, 70%, 90% {
+        transform: scale(1.2);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
