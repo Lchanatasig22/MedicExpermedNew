@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.IO;
+using QuestPDF.Infrastructure;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +43,7 @@ builder.Services.AddScoped<AppointmentService>();
 builder.Services.AddScoped<ConsultationService>();
 builder.Services.AddLogging(); ;
 
+QuestPDF.Settings.License = LicenseType.Community;
 // Configurar y habilitar sesiones
 builder.Services.AddSession(options =>
 {

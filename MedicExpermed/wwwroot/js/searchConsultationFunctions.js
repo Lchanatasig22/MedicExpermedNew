@@ -929,8 +929,8 @@ function generatePdf() {
         return;
     }
 
-    const urlTemplate = '@Url.Action("GeneratePdf", "Consultation", new { id = "__id__", tipoDocumento = "__tipoDocumento__" })';
-    const url = urlTemplate.replace("__id__", consultaId).replace("__tipoDocumento__", selectedOption);
+    // Crear la URL dinámica de forma manual
+    const url = `/Consultation/GeneratePdf?id=${consultaId}&tipoDocumento=${selectedOption}`;
 
     fetch(url, {
         method: 'POST',
@@ -938,31 +938,32 @@ function generatePdf() {
             'Content-Type': 'application/json'
         }
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al generar el PDF');
-            }
-            return response.blob();
-        })
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            window.open(url, '_blank');
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al generar el PDF');
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
 
-            // Mostrar mensaje con SweetAlert después de generar el PDF
-            Swal.fire({
-                icon: 'success',
-                title: 'Documento generado',
-                text: 'El documento PDF ha sido generado exitosamente.'
-            });
-
-            // Cerrar el modal después de generar el PDF
-            $('#pdfModal').modal('hide');
-        })
-        .catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: error.message
-            });
+        // Mostrar mensaje con SweetAlert después de generar el PDF
+        Swal.fire({
+            icon: 'success',
+            title: 'Documento generado',
+            text: 'El documento PDF ha sido generado exitosamente.'
         });
+
+        // Cerrar el modal después de generar el PDF
+        $('#pdfModal').modal('hide');
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message
+        });
+    });
 }
+
