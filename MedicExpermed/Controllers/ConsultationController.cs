@@ -238,17 +238,22 @@ namespace MedicExpermed.Controllers
                 // Devuelve un JSON con éxito si es una solicitud AJAX
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
+                    TempData["SuccessMessage"] = $"La consulta creado exitosamente";
+
                     return Json(new { success = true, message = "Consulta creada exitosamente" });
 
                 }
                 else
                 {
                     // Redirigir en caso de una solicitud normal (no AJAX)
+                    TempData["SuccessMessage"] = "Consulta Registrado.";
                     return Json(new { success = true, redirectUrl = Url.Action("ListarConsultas") });
                 }
             }
             catch (Exception ex)
             {
+                TempData["ErrorMessage"] = $"Error al crear el paciente: {ex.Message}";
+
                 _logger.LogError(ex, "Error al crear la consulta");
 
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
