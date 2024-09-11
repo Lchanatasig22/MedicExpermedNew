@@ -195,6 +195,14 @@ namespace MedicExpermed.Services
             return consultation;
         }
 
+        /// <summary>
+        /// Mapeo consultation consultum
+        /// </summary>
+        /// <param name="consultation"></param>
+        /// <returns></returns>
+
+        
+
 
 
         /// <summary>

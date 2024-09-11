@@ -49,6 +49,9 @@ namespace MedicExpermed.Models
         public ExamenFisico ExamenFisico { get; set; } // Examen físico asociado
         public AntecedentesFamiliare AntecedentesFamiliares { get; set; } // Antecedentes familiares asociados
 
+        public virtual Usuario? MedicoConsultaDNavigation { get; set; }
+        public virtual Paciente? PacienteConsultaPNavigation { get; set; }
+
         // Constructor que inicializa los objetos complejos
         public Consultation()
         {

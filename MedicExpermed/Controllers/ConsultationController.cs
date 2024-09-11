@@ -443,6 +443,158 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
             }
         }
 
+
+
+        [HttpPost]
+        public async Task<IActionResult> GeneratePdf(int id, string tipoDocumento)
+        {
+            // Espera a que se complete la tarea asincrónica para obtener la consulta
+            var consulta = await _consultationService.ObtenerConsultaPorIdAsync(id);
+
+            if (consulta == null)
+            {
+                return NotFound();
+            }
+
+            // Generar el PDF según el tipo de documento
+            var document = GenerateDocumentByType(tipoDocumento, consulta);
+
+            using var memoryStream = new MemoryStream();
+            document.GeneratePdf(memoryStream);
+
+            memoryStream.Position = 0;
+            return File(memoryStream.ToArray(), "application/pdf", $"Consulta_{id}_{tipoDocumento}.pdf");
+        }
+
+
+        private IDocument GenerateDocumentByType(string tipoDocumento, Consultation consulta)
+        {
+            // Configuración para cada tipo de documento
+            switch (tipoDocumento)
+            {
+                case "receta":
+                    return CreateRecetaDocument(consulta);
+                case "justificacion":
+                    return CreateJustificacionDocument(consulta);
+                case "consulta":
+                    return CreateConsultaDocument(consulta);
+                case "laboratorio":
+                    return CreateLaboratorioDocument(consulta);
+                case "imagen":
+                    return CreateImagenDocument(consulta);
+                default:
+                    throw new InvalidOperationException("Tipo de documento no soportado.");
+            }
+        }
+
+
+        private IDocument CreateRecetaDocument(Consultation consulta)
+        {
+            // Tamaño de página A5 con márgenes grandes
+            return Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A5);
+                    page.Margin(40);
+                    page.Header().Text("Receta Médica").FontSize(18).Bold().AlignCenter();
+                    page.Content().Column(column =>
+                    {
+                        column.Item().Text($"Paciente: {consulta.MedicoConsultaDNavigation.ApellidosUsuario}");
+                        column.Item().Text($"Prescripción: {consulta.UsuarioCreacion}");
+                        column.Item().Text($"Indicaciones: {consulta.MedicoConsultaDNavigation.CiUsuario}");
+                    });
+                    page.Footer().AlignCenter().Text("Gracias por confiar en nosotros.");
+                });
+            });
+        }
+
+        private IDocument CreateJustificacionDocument(Consultation consulta)
+        {
+            // Tamaño carta con orientación horizontal
+            return Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.Letter);
+                    
+                    page.Margin(30);
+                    page.Header().Text("Certificado Médico").FontSize(20).Bold().AlignCenter();
+                    page.Content().Column(column =>
+                    {
+                        column.Item().Text($"Certifico que el paciente {consulta.PacienteConsultaPNavigation.PrimernombrePacientes}...");
+                        column.Item().Text($"Días de reposo: {consulta.DiasIncapacidad}");
+                        column.Item().Text($"Fecha: {System.DateTime.Now.ToShortDateString()}");
+                    });
+                    page.Footer().AlignRight().Text("Doctor Firma");
+                });
+            });
+        }
+
+        private IDocument CreateConsultaDocument(Consultation consulta)
+        {
+            // Tamaño de página A4 estándar
+            return Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(20);
+                    page.Header().Text("Formato de Consulta").FontSize(16).Bold().AlignCenter();
+                    page.Content().Column(column =>
+                    {
+                        column.Item().Text($"Paciente: {consulta.PacienteConsultaPNavigation.PrimernombrePacientes}");
+                        column.Item().Text($"Diagnóstico: {consulta.Medicamentos}");
+                        column.Item().Text($"Recomendaciones: {consulta.ReconocimientoFarmacologico}");
+                    });
+                    page.Footer().AlignCenter().Text("Firma del médico");
+                });
+            });
+        }
+
+        private IDocument CreateLaboratorioDocument(Consultation consulta)
+        {
+            // Formato especializado de laboratorio, tamaño A4 con márgenes pequeños
+            return Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(10);
+                    page.Header().Text("Resultados de Laboratorio").FontSize(16).Bold().AlignCenter();
+                    page.Content().Column(column =>
+                    {
+                        column.Item().Text($"Examen: {consulta.ConsultaPrincipal}");
+                        column.Item().Text($"Resultado: {consulta.ReconocimientoFarmacologico}");
+                        column.Item().Text("Detalles adicionales...");
+                    });
+                    page.Footer().AlignCenter().Text("Laboratorio Central");
+                });
+            });
+        }
+
+        private IDocument CreateImagenDocument(Consultation consulta)
+        {
+            // Informe de imagenología, tamaño A3 con orientación horizontal
+            return Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A3);
+                  
+                    page.Margin(50);
+                    page.Header().Text("Informe de Imagenología").FontSize(18).Bold().AlignCenter();
+                    page.Content().Column(column =>
+                    {
+                        column.Item().Text($"Paciente: {consulta.PacienteConsultaPNavigation.PrimernombrePacientes}");
+                        column.Item().Text($"Examen: {consulta.EnfermedadConsulta}");
+                        column.Item().Text($"Observaciones: {consulta.Laboratorios}");
+                    });
+                    page.Footer().AlignRight().Text("Firma del radiólogo");
+                });
+            });
+        }
+
         [HttpGet("Buscar")]
         public async Task<IActionResult> BuscarPacientes(int? cedula, string primerNombre, string primerApellido)
         {
