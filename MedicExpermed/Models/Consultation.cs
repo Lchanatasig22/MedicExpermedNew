@@ -51,6 +51,15 @@ namespace MedicExpermed.Models
 
         public virtual Usuario? MedicoConsultaDNavigation { get; set; }
         public virtual Paciente? PacienteConsultaPNavigation { get; set; }
+        public virtual Catalogo? EstadocivilPacientesCaNavigation { get; set; }
+        public virtual Catalogo? FormacionprofesionalPacientesCaNavigation { get; set; }
+        public virtual Pai? NacionalidadPacientesPaNavigation { get; set; }
+        public virtual Localidad? ProvinciaPacientesLNavigation { get; set; }
+        public virtual Catalogo? SegurosaludPacientesCaNavigation { get; set; }
+        public virtual Catalogo? SexoPacientesCaNavigation { get; set; }
+        public virtual Catalogo? TipodocumentoPacientesCaNavigation { get; set; }
+        public virtual Catalogo? TiposangrePacientesCaNavigation { get; set; }
+
 
         // Constructor que inicializa los objetos complejos
         public Consultation()
@@ -65,6 +74,9 @@ namespace MedicExpermed.Models
             Diagnosticos = new List<ConsultaDiagnosticoDTO>();
             OrganosSistemas = new OrganosSistema();
             ExamenFisico = new ExamenFisico();
+            MedicoConsultaDNavigation = new Usuario();
+            PacienteConsultaPNavigation = new Paciente();
+            SexoPacientesCaNavigation = new Catalogo();
         }
     }
 

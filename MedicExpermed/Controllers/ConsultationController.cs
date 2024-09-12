@@ -704,20 +704,63 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
             // Tamaño carta con orientación horizontal
             return Document.Create(container =>
             {
+
                 container.Page(page =>
                 {
-                    page.Size(PageSizes.Letter);
-                    
-                    page.Margin(30);
-                    page.Header().Text("Certificado Médico").FontSize(20).Bold().AlignCenter();
-                    page.Content().Column(column =>
+                    // Tamaño de la página en formato A4 y márgenes
+                    page.Size(595, 842); // Ancho: 210 mm, Alto: 297 mm en puntos
+                    page.Margin(50); // Ajusta el margen según sea necesario
+
+                    // Encabezado del documento
+                    page.Header().Row(row =>
                     {
-                        column.Item().Text($"Certifico que el paciente {consulta.PacienteConsultaPNavigation.PrimernombrePacientes}...");
-                        column.Item().Text($"Días de reposo: {consulta.DiasIncapacidad}");
-                        column.Item().Text($"Fecha: {System.DateTime.Now.ToShortDateString()}");
+                        row.RelativeColumn(1)
+                           .Column(column =>
+                           {
+                               // Logo de la clínica
+                               column.Item().Image("C:\\Users\\SAFERISK\\Source\\Repos\\MedicExpermedNew\\MedicExpermed\\wwwroot\\images\\ExpermedLogoAzul-removebg-preview.png", ImageScaling.FitWidth); // Ruta del logo
+
+                               // Detalles de la clínica
+                               column.Item().Text("Clínica de Salud Integral", TextStyle.Default.Size(16).Bold());
+                               column.Item().Text("Av. Siempre Viva 123, Ciudad");
+                               column.Item().Text("Tel: 555-1234");
+                           });
+
+                        row.ConstantColumn(50); // Espacio entre el logo y el contenido.
                     });
-                    page.Footer().AlignRight().Text("Doctor Firma");
+
+                    // Contenido del justificante médico
+                    page.Content().PaddingVertical(20).Column(column =>
+                    {
+                        column.Spacing(10);
+
+                        // Título del justificante
+                        column.Item().Text("Justificante Médico", TextStyle.Default.Size(20).Bold().Underline());
+
+                        // Información del paciente y doctor
+                        column.Item().Text($"Nombre del Paciente: Juan Pérez", TextStyle.Default.Size(14));
+                        column.Item().Text($"Nombre del Doctor: Dr. Ana Gómez", TextStyle.Default.Size(14));
+                        column.Item().Text($"Fecha de Emisión: {DateTime.Now.ToShortDateString()}", TextStyle.Default.Size(14));
+                        column.Item().Text($"Diagnóstico: Gripe común", TextStyle.Default.Size(14));
+
+                        // Separador visual
+                        column.Item().PaddingVertical(10).BorderBottom(1).LineHorizontal(1);
+
+                        // Espacio para firma y sello
+                        column.Item().PaddingVertical(20).Row(row =>
+                        {
+                            row.RelativeColumn().Text("Firma del Doctor:", TextStyle.Default.Size(14).Bold());
+                            row.RelativeColumn().Text("Sello de la Clínica:", TextStyle.Default.Size(14).Bold());
+                        });
+                    });
+
+                    // Pie de página
+                    page.Footer().AlignCenter().Text($"Emitido el {DateTime.Now.ToShortDateString()}", TextStyle.Default.Italic());
                 });
+
+
+
+
             });
         }
 
@@ -730,7 +773,8 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                 container.Page(page =>
                 {
                     page.Margin(20);
-                    page.Size(700, 960);
+                    page.Size(598, 845);
+
                     page.DefaultTextStyle(x => x.FontFamily("Arial").FontSize(10));
 
                     // Header con una tabla de 6 columnas
@@ -743,7 +787,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             columns.ConstantColumn(100); // Apellido
                             columns.ConstantColumn(70); // Sexo
                             columns.ConstantColumn(70); // Edad
-                            columns.ConstantColumn(100); // Nº Historia Clínica
+                            columns.ConstantColumn(118); // Nº Historia Clínica
                         });
 
                         // Fila de encabezados
@@ -762,17 +806,17 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
                         // Fila de contenido
                         table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3)
-                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text("AMARE INSTITUTO").FontSize(7);
+                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text($"{consulta.PacienteConsultaPNavigation.DireccionPacientes}").FontSize(7);
                         table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3)
-                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text("Julia Fernanda").FontSize(7);
+                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text($"{consulta.PacienteConsultaPNavigation.PrimernombrePacientes}").FontSize(7);
                         table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3)
-                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text("Lema Flores").FontSize(7);
+                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text($"{consulta.PacienteConsultaPNavigation.PrimerapellidoPacientes}").FontSize(7);
                         table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3)
-                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text("F").FontSize(7);
+                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text($"{consulta.PacienteConsultaPNavigation.SexoPacientesCaNavigation.DescripcionCatalogo}").FontSize(7);
                         table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3)
-                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text("43").FontSize(7);
+                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text($"{consulta.PacienteConsultaPNavigation.EdadPacientes}").FontSize(7);
                         table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3)
-                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text("1713456780").FontSize(7);
+                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text($"{consulta.PacienteConsultaPNavigation.CiPacientes}").FontSize(7);
                     });
 
                     // Contenido principal con múltiples tablas
@@ -783,7 +827,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                         {
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(555);
+                                columns.ConstantColumn(557);
                             });
 
                             // Fila de encabezado
@@ -791,7 +835,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                 CellStyle.Background("#ccccff")).PaddingLeft(3).Text("1. MOTIVO DE CONSULTA").FontSize(10).Bold();
 
                             // Fila de datos
-                            table.Cell().MinHeight(14).Border(2).BorderColor(Colors.Grey.Medium).Text("Dolor abdominal").FontSize(10);
+                            table.Cell().MinHeight(14).Border(2).BorderColor(Colors.Grey.Medium).Text($"{consulta.MotivoConsulta}").FontSize(10);
                         });
 
                         // Segunda tabla
@@ -799,7 +843,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                         {
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(555);
+                                columns.ConstantColumn(557);
                             });
 
                             // Fila de encabezado
@@ -807,10 +851,18 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                 CellStyle.Background("#ccccff")).PaddingLeft(3).Text("2. ANTECEDENTES PERSONALES").FontSize(10).Bold();
 
                             // Fila de datos
-                            table.Cell().MinHeight(14).BorderLeft(2).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text("Antecedente de hipertensión").FontSize(10);
-                            table.Cell().MinHeight(14).BorderLeft(2).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
-                            table.Cell().MinHeight(14).BorderLeft(2).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
-                            table.Cell().MinHeight(14).BorderLeft(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
+                            table.Cell().MinHeight(14).BorderLeft(2).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text($"{consulta.AntecedentesPersonales}").FontSize(10);
+                            table.Cell().MinHeight(14).BorderLeft(2).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text(consulta.Alergias.Count > 0 
+                                ? string.Join(", ", consulta.Alergias.Select(a => a.CatalogoalergiaId))
+                                : "Sin alergias")
+                                .FontSize(10);
+
+                            table.Cell().MinHeight(14).BorderLeft(2).BorderBottom(1).BorderRight(2).BorderColor("#808080")
+                                .Text(consulta.Cirugias.Count > 0
+                                    ? string.Join(", ", consulta.Cirugias.Select(c => c.CatalogocirugiaId))
+                                    : "Sin cirugías")
+                                .FontSize(10);
+
                         });
 
                         // Tercera tabla
@@ -820,7 +872,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             // Definir las columnas de la tabla para el encabezado
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(555); // Encabezado general ocupa toda la fila
+                                columns.ConstantColumn(557); // Encabezado general ocupa toda la fila
                             });
 
                             // Fila de encabezado general "3 ANTECEDENTES FAMILIARES"
@@ -854,32 +906,32 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                         columns.ConstantColumn(28); // Tercera columna
                                         columns.ConstantColumn(28); // Tercera columna
                                         columns.ConstantColumn(29); // Tercera columna
-                                        columns.ConstantColumn(20); // Tercera columna
+                                        columns.ConstantColumn(24); // Tercera columna
 
 
                                     });
 
                                     // Fila dentro de la tabla anidada 
-                                    nestedTable.Cell().BorderRight(1).BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("1     CARDIOPATIA").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("2.     DIABETES").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("3. ENF.         CARDIOVASCULAR").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().BorderRight(1).BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("1.\nCARDIOPATIA").FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text(consulta.AntecedentesFamiliares.Cardiopatia == true ? "X" : "").FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("2. \nDIABETES").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text(consulta.AntecedentesFamiliares.Diabetes == true ? "X" : "").FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(15).MinWidth(3).Text("3. ENF.CARDIOVASCULAR\n").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text(consulta.AntecedentesFamiliares.EnfCardiovascular == true ? "X" : "").FontSize(5).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("4.  HIPERTENSION").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("5.              CANCER").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text(consulta.AntecedentesFamiliares.Hipertension == true ? "X" : "").FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("5.\nCANCER").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text(consulta.AntecedentesFamiliares.Cancer == true ? "X" : "").FontSize(5).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("6. TUBERCULOSIS").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text(consulta.AntecedentesFamiliares.Tuberculosis == true ? "X" : "").FontSize(5).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("7.ENF MENTAL").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text(consulta.AntecedentesFamiliares.EnfMental == true ? "X" : "").FontSize(5).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("8. ENF INFECCIOSA").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text(consulta.AntecedentesFamiliares.EnfInfecciosa == true ? "X" : "").FontSize(5).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("9. MAL FORMACION").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text(consulta.AntecedentesFamiliares.MalFormacion == true ? "X" : "").FontSize(5).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("10 OTRO").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text(consulta.AntecedentesFamiliares.Otro == true ? "X" : "").FontSize(5).AlignCenter();
 
                                 });
                             });
@@ -893,7 +945,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                         {
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(555);
+                                columns.ConstantColumn(557);
                             });
 
                             // Fila de encabezado
@@ -915,7 +967,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             // Definir las columnas de la tabla para el encabezado
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(555); // Encabezado general ocupa toda la fila
+                                columns.ConstantColumn(557); // Encabezado general ocupa toda la fila
                             });
 
                             // Fila de encabezado general "3 ANTECEDENTES FAMILIARES"
@@ -944,7 +996,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                         columns.ConstantColumn(16); // Tercera columna
                                         columns.ConstantColumn(79); // Tercera columna
                                         columns.ConstantColumn(16); // Tercera columna
-                                        columns.ConstantColumn(16); // Tercera columna
+                                        columns.ConstantColumn(17); // Tercera columna
 
 
                                     });
@@ -968,18 +1020,6 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
                                 });
                             });
                             table.Cell().Element(CellStyle =>
@@ -1004,41 +1044,41 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                         columns.ConstantColumn(16); // Tercera columna
                                         columns.ConstantColumn(16); // Tercera columna
                                         columns.ConstantColumn(79); // Tercera columna
-                                        columns.ConstantColumn(16); // Tercera columna
+                                        columns.ConstantColumn(17); // Tercera columna
                                         columns.ConstantColumn(16); // Tercera columna
 
 
                                     });
 
                                     // Fila dentro de la tabla anidada 
-                                    nestedTable.Cell().BorderRight(1).BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("1 ÓRGANO DE LOS\r\nSENTIDOS").FontSize(5).Bold().AlignEnd();
+                                    nestedTable.Cell().BorderRight(1).BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("1 ÓRGANO DE LOS\r\nSENTIDOS").FontSize(6).Bold().AlignEnd();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("3 CARDIO\r\nVASCULAR").FontSize(5).Bold().AlignEnd();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("3 CARDIO\r\nVASCULAR").FontSize(6).Bold().AlignEnd();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("5.  GENITAL").FontSize(5).Bold().AlignEnd();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("5.  GENITAL").FontSize(6).Bold().AlignEnd();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("7. MÚSCULO\r\nESQUELÉTICO").FontSize(5).Bold().AlignEnd();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("7. MÚSCULO\r\nESQUELÉTICO").FontSize(6).Bold().AlignEnd();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("9. HEMO LINFÁTICO").FontSize(5).Bold().AlignEnd();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("9. HEMO LINFÁTICO").FontSize(6).Bold().AlignEnd();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("2. RESPIRATORIO").FontSize(5).Bold().AlignEnd();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("2. RESPIRATORIO").FontSize(6).Bold().AlignEnd();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("4. DIGESTIVO").FontSize(5).Bold().AlignEnd();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("4. DIGESTIVO").FontSize(6).Bold().AlignEnd();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("6. URINARIO").FontSize(5).Bold().AlignEnd();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("6. URINARIO").FontSize(6).Bold().AlignEnd();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("8. ENDOCRINO").FontSize(5).Bold().AlignEnd();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("8. ENDOCRINO").FontSize(6).Bold().AlignEnd();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("10. NERVIOSO").FontSize(5).Bold().AlignEnd();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("10. NERVIOSO").FontSize(6).Bold().AlignEnd();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                 });
@@ -1054,12 +1094,12 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             // Definir las columnas de la tabla para el encabezado
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.RelativeColumn(10); // Encabezado general ocupa toda la fila
+                                columns.ConstantColumn(557); // Encabezado general ocupa toda la fila
                             });
 
                             // Fila de encabezado general "3 ANTECEDENTES FAMILIARES"
                             table.Cell().MinHeight(14).BorderLeft(2).BorderRight(2).BorderTop(2).BorderColor("#808080").Element(CellStyle =>
-                                CellStyle.Background("#ccccff")).AlignLeft().PaddingTop(3).Text("6 SIGNOS VITALES Y ANTROPOMETRIA").FontSize(10).Bold();
+                                CellStyle.Background("#ccccff")).AlignLeft().PaddingTop(3).PaddingLeft(3).Text("6 SIGNOS VITALES Y ANTROPOMETRIA").FontSize(10).Bold();
                             table.Cell().Element(CellStyle =>
                             {
                                 // Crear una tabla interna con varias columnas dentro de la celda "padre"
@@ -1074,7 +1114,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                         columns.ConstantColumn(92); // Tercera columna
                                         columns.ConstantColumn(92); // Tercera columna
                                         columns.ConstantColumn(92); // Tercera columna
-                                        columns.ConstantColumn(93); // Tercera columna
+                                        columns.ConstantColumn(95); // Tercera columna
 
 
                                     });
@@ -1204,9 +1244,9 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             // Definir las columnas de la tabla principal para el encabezado
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.RelativeColumn(3); // Primera columna
-                                columns.RelativeColumn(3); // Segunda columna
-                                columns.RelativeColumn(4); // Tercera columna
+                                columns.ConstantColumn(185); // Primera columna
+                                columns.ConstantColumn(185); // Segunda columna
+                                columns.ConstantColumn(187); // Tercera columna
                             });
 
                             // Fila de encabezado "7 EXAMEN FÍSICO REGIONAL"
@@ -1335,7 +1375,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                 columns.ConstantColumn(193);  // Columna 7 (CIE)
                                 columns.ConstantColumn(13);  // Columna 8 (PRE)
                                 columns.ConstantColumn(16);  // Columna 9 (DEF)
-                                columns.ConstantColumn(16);  // Columna 9 (DEF)
+                                columns.ConstantColumn(18);  // Columna 9 (DEF)
                             });
 
                             // Fila de encabezado "8 DIAGNOSTICO"
@@ -1382,7 +1422,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                         columns.RelativeColumn(2);   // Columna 7 (Proporción más amplia)
                                         columns.ConstantColumn(18);  // Columna 8
                                         columns.ConstantColumn(18);  // Columna 9
-                                        columns.ConstantColumn(18);  // Columna 10
+                                        columns.ConstantColumn(20);  // Columna 10
                                     });
 
                                     // Fila dentro de la subtabla con 10 celdas
@@ -1422,8 +1462,8 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             // Definir las columnas de la tabla principal con dos columnas
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.RelativeColumn(1);  // Columna 1
-                                columns.RelativeColumn(1);  // Columna 2
+                                columns.ConstantColumn(278);  // Columna 1
+                                columns.ConstantColumn(278);  // Columna 2
                             });
 
                             // Fila de encabezado "9 PLANES DE TRATAMIENTO"
@@ -1533,7 +1573,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                 container.Page(page =>
                 {
                     page.Margin(20);
-                    page.Size(700, 960);
+                    page.Size(598, 845);
                     page.DefaultTextStyle(x => x.FontFamily("Arial").FontSize(10));
 
                     // Contenido de la segunda página con una sola tabla de 5 columnas
@@ -1545,62 +1585,613 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             // Definir las columnas de la tabla principal con cinco columnas
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(135);  // Columna 1
-                                columns.ConstantColumn(135);  // Columna 2
+                                columns.ConstantColumn(136);  // Columna 1
+                                columns.ConstantColumn(136);  // Columna 2
                                 columns.ConstantColumn(10);   // Columna 3 (espaciador)
-                                columns.ConstantColumn(135);  // Columna 4
-                                columns.ConstantColumn(135);  // Columna 5
+                                columns.ConstantColumn(136);  // Columna 4
+                                columns.ConstantColumn(136);  // Columna 5
                             });
 
                             // Fila de datos
-                            table.Cell().MinHeight(20).BorderLeft(2).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#ccccff")
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#ccccff")
                                 .Text("10 EVOLUCIÓN").FontSize(10).AlignLeft().Bold();
 
-                            table.Cell().MinHeight(20).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#ccccff")
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#ccccff")
                                 .Text("FIRMAR AL PIE DE CADA NOTA").FontSize(7).AlignEnd();
 
                             table.Cell().MinHeight(20).BorderColor("#808080").Background("#ffffff")
                                 .Text("").FontSize(9).AlignLeft().Bold();
 
-                            table.Cell().MinHeight(20).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderColor("#808080").Background("#ccccff")
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderColor("#808080").Background("#ccccff")
                                 .Text("11 PRESCRIPCIONES").FontSize(9).AlignLeft();
 
-                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#ccccff")
+                            table.Cell().MinHeight(15).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#ccccff")
                                 .Text("FIRMAR AL PIE DE CADA PRESCRIPCIÓN").FontSize(5).AlignRight();
                         });
 
                         // Espacio entre tablas
+                        column.Item().Text("REGISTRAR EN ROJO LA ADMINISTRACIÓN DE FÁRMACOS Y OTROS PRODUCTOS (ENFERMERÍA)").FontSize(8).Light().AlignEnd();
 
-                        // NUEVA TABLA de seis columnas
+                        // Primera tabla de cinco columnas
                         column.Item().Table(table =>
                         {
-                            // Definir las columnas de la nueva tabla con seis columnas
+                            // Definir las columnas de la tabla principal con cinco columnas
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(100);  // Columna 1
-                                columns.ConstantColumn(120);  // Columna 2
-                                columns.ConstantColumn(50);   // Columna 3
-                                columns.ConstantColumn(150);  // Columna 4
-                                columns.ConstantColumn(130);  // Columna 5
-                                columns.ConstantColumn(80);   // Columna 6
+                                columns.ConstantColumn(60);  // Columna 1
+                                columns.ConstantColumn(30);  // Columna 2
+                                columns.ConstantColumn(182);  // Columna 2
+                                columns.ConstantColumn(13);   // Columna 3 (espaciador)
+                                columns.ConstantColumn(220);  // Columna 1
+                                columns.ConstantColumn(50);  // Columna 2
+
                             });
 
-                            // Fila de encabezados
-                            table.Cell().Padding(5).Border(1).Background("#ccccff").Text("Columna 1").FontSize(10).Bold().AlignCenter();
-                            table.Cell().Padding(5).Border(1).Background("#ccccff").Text("Columna 2").FontSize(10).Bold().AlignCenter();
-                            table.Cell().Padding(5).Border(1).Background("#ccccff").Text("Columna 3").FontSize(10).Bold().AlignCenter();
-                            table.Cell().Padding(5).Border(1).Background("#ccccff").Text("Columna 4").FontSize(10).Bold().AlignCenter();
-                            table.Cell().Padding(5).Border(1).Background("#ccccff").Text("Columna 5").FontSize(10).Bold().AlignCenter();
-                            table.Cell().Padding(5).Border(1).Background("#ccccff").Text("Columna 6").FontSize(10).Bold().AlignCenter();
+                            // Fila de datos
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#ccffcc")
+                                .Text("\nFECHA\r\n(DIA/MES/AÑO)").FontSize(8).AlignCenter();
 
-                            // Fila de datos de ejemplo
-                            table.Cell().Padding(5).Border(1).Background("#ffffff").Text("Dato 1").FontSize(9).AlignCenter();
-                            table.Cell().Padding(5).Border(1).Background("#ffffff").Text("Dato 2").FontSize(9).AlignCenter();
-                            table.Cell().Padding(5).Border(1).Background("#ffffff").Text("Dato 3").FontSize(9).AlignCenter();
-                            table.Cell().Padding(5).Border(1).Background("#ffffff").Text("Dato 4").FontSize(9).AlignCenter();
-                            table.Cell().Padding(5).Border(1).Background("#ffffff").Text("Dato 5").FontSize(9).AlignCenter();
-                            table.Cell().Padding(5).Border(1).Background("#ffffff").Text("Dato 6").FontSize(9).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#ccffcc")
+                                .Text("\nHORA").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#ccffcc")
+                                .Text("\nNOTAS DE EVOLUCIÓN").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#ccffcc")
+                                .Text("FARMACOTERAPIA E INDICACIONES\r\n(PARA ENFERMERÍA Y OTRO PERSONAL)").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#ccffcc")
+                                .Text("ADMINISTR.\r\nFÁRMACOS\r\nY OTROS").FontSize(7).AlignCenter();
+
+                            //Notas abajo
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                             .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                       .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderLeft(2).BorderRight(1).BorderTop(2).BorderBottom(2).BorderColor("#808080").Background("#FFFFFF")
+                          .Text("").FontSize(8).AlignCenter();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter().Bold();
+
+                            table.Cell().MinHeight(15).BorderColor("#808080").BorderLeft(2).BorderRight(2).Background("#ffffff")
+                                .Text("").FontSize(9).AlignLeft().Bold();
+
+                            table.Cell().MinHeight(15).BorderTop(2).BorderBottom(2).BorderLeft(2).BorderRight(1).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
+
+                            table.Cell().MinHeight(20).BorderRight(2).BorderBottom(2).BorderTop(2).BorderColor("#808080").Background("#FFFFFF")
+                                .Text("").FontSize(7).AlignCenter();
                         });
+
                     });
 
 
@@ -1632,16 +2223,174 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
             {
                 container.Page(page =>
                 {
-                    page.Size(PageSizes.A4);
-                    page.Margin(10);
-                    page.Header().Text("Resultados de Laboratorio").FontSize(16).Bold().AlignCenter();
-                    page.Content().Column(column =>
+                    page.Margin(30);
+
+                    page.Size(1194, 847); // Tamaño A3 horizontal
+
+                    page.DefaultTextStyle(x => x.FontFamily("Arial")); // Cambiar la familia de fuentes a Arial
+
+                    page.Header().Row(row =>
                     {
-                        column.Item().Text($"Examen: {consulta.ConsultaPrincipal}");
-                        column.Item().Text($"Resultado: {consulta.ReconocimientoFarmacologico}");
-                        column.Item().Text("Detalles adicionales...");
+                        row.ConstantItem(550).Column(col =>
+                        {
+                            col.Item().Text($"Dr:").Bold().FontSize(14); // Encabezado más grande
+                            col.Item().Text("Especialista en Medicina general").FontSize(12);
+                            col.Item().Text("e-mail: helpdesk@asersoat.com").FontSize(11);
+                            col.Item().Text("Teléfonos:").FontSize(11);
+                            col.Item().PaddingTop(2).Text("").FontSize(11);
+                            col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
+                        });
+
+                        row.AutoItem().PaddingHorizontal(10).LineVertical(1).LineColor(Colors.Grey.Lighten1);
+
+                        row.RelativeColumn().Column(col =>
+                        {
+                            col.Item().Text("Dr. Kim Morales").Bold().FontSize(14); // Encabezado más grande
+                            col.Item().Text("Especialista en Medicina general").FontSize(12);
+                            col.Item().Text("e-mail: helpdesk@asersoat.com").FontSize(11);
+                            col.Item().Text("Teléfonos:").FontSize(11);
+                            col.Item().PaddingTop(2).Text("").FontSize(11);
+                            col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
+                        });
                     });
-                    page.Footer().AlignCenter().Text("Laboratorio Central");
+
+
+                    page.Content().Column(content =>
+                    {
+                        // Primera fila
+                        content.Item().Row(row =>
+                        {
+                            row.ConstantItem(275).Column(col =>
+                            {
+                                col.Item().PaddingTop(10).Text("Fecha:").FontSize(11).Bold();
+                                col.Item().Text("Apellidos:").FontSize(11).Bold();
+                                col.Item().Text("Nombres:").FontSize(11).Bold();
+                                col.Item().Text("Edad:").FontSize(11).Bold();
+                                col.Item().Text("Alergias:").FontSize(11).Bold();
+                                col.Item().Text("Diagnostico:").FontSize(11).Bold();
+
+                            });
+
+                            row.ConstantItem(275).Column(col =>
+                            {
+                                col.Item().PaddingTop(10).Text("Receta: ").Bold().FontSize(14); // Encabezado más grande
+                                col.Item().Text("CC: ").FontSize(12);
+
+                            });
+
+                            row.AutoItem().PaddingHorizontal(10).LineVertical(1).LineColor(Colors.Grey.Lighten1);
+
+                            row.ConstantItem(275).Column(col =>
+                            {
+                                col.Item().PaddingTop(10).Text("Fecha:").FontSize(11).Bold();
+                                col.Item().Text("Apellidos:").FontSize(11).Bold();
+                                col.Item().Text("Nombres:").FontSize(11).Bold();
+                                col.Item().Text("Edad:").FontSize(11).Bold();
+                                col.Item().Text("Alergias:").FontSize(11).Bold();
+                                col.Item().Text("Diagnostico:").FontSize(11).Bold();
+                            });
+
+                            row.ConstantItem(275).Column(col =>
+                            {
+                                col.Item().PaddingTop(10).Text("Receta: ").Bold().FontSize(14); // Encabezado más grande
+                                col.Item().Text("CC: ").FontSize(12);
+                            });
+                        });
+
+                        // Segunda fila (Nueva fila)
+                        content.Item().Row(row =>
+                        {
+                            row.ConstantItem(530).PaddingTop(50).Column(col =>
+                            {
+                                col.Item().Text("LABORATORIO").Bold().FontSize(14); // Nuevo contenido
+                                col.Item().Text("Texto adicional").FontSize(12);
+                            });
+
+                            row.ConstantItem(20).PaddingTop(50).Column(col =>
+                            {
+                                col.Item().Text("").FontSize(12);
+                                col.Item().Text("x4").FontSize(12);
+                            });
+
+                            row.AutoItem().PaddingHorizontal(10).LineVertical(1).LineColor(Colors.Grey.Lighten1);
+
+                            row.ConstantItem(550).PaddingTop(50).Column(col =>
+                            {
+                                col.Item().PaddingBottom(20).Text("OBSERVACIONES").Bold().FontSize(14); // Nuevo contenido
+                                col.Item().MinWidth(300).Text("Texto adicional").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+
+
+
+
+                            });
+
+                        });
+
+
+
+
+
+
+                    });
+
+                    page.Footer().Column(footer =>
+                    {// Nueva fila del footer
+
+
+                        // Primera fila del footer
+                        footer.Item().Row(row =>
+                        {
+                            row.ConstantItem(530).Column(col =>
+                            {
+                                col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
+                                col.Item().Text("Direccion: Av de la Prensa N49-180 y Juan Holguín Edifico Amafkar sexto piso, Chordeleg - Ecuador").FontSize(11).AlignCenter();
+                            });
+
+                            row.AutoItem().PaddingHorizontal(30).LineVertical(1).LineColor(Colors.Grey.Lighten1);
+
+                            row.RelativeColumn().Column(col =>
+                            {
+                                col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
+                                col.Item().Text("Direccion: Av de la Prensa N49-180 y Juan Holguín Edifico Amafkar sexto piso, Chordeleg - Ecuador").FontSize(11).AlignCenter();
+                            });
+                        });
+
+
+                    });
+
                 });
             });
         }
@@ -1653,17 +2402,173 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
             {
                 container.Page(page =>
                 {
-                    page.Size(PageSizes.A3);
-                  
-                    page.Margin(50);
-                    page.Header().Text("Informe de Imagenología").FontSize(18).Bold().AlignCenter();
-                    page.Content().Column(column =>
+                    page.Margin(30);
+
+                    page.Size(1194, 847); // Tamaño A3 horizontal
+
+                    page.DefaultTextStyle(x => x.FontFamily("Arial")); // Cambiar la familia de fuentes a Arial
+
+                    page.Header().Row(row =>
                     {
-                        column.Item().Text($"Paciente: {consulta.PacienteConsultaPNavigation.PrimernombrePacientes}");
-                        column.Item().Text($"Examen: {consulta.EnfermedadConsulta}");
-                        column.Item().Text($"Observaciones: {consulta.Laboratorios}");
+                        row.ConstantItem(550).Column(col =>
+                        {
+                            col.Item().Text("Dr. Kim Morales").Bold().FontSize(14); // Encabezado más grande
+                            col.Item().Text("Especialista en Medicina general").FontSize(12);
+                            col.Item().Text("e-mail: helpdesk@asersoat.com").FontSize(11);
+                            col.Item().Text("Teléfonos:").FontSize(11);
+                            col.Item().PaddingTop(2).Text("").FontSize(11);
+                            col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
+                        });
+
+                        row.AutoItem().PaddingHorizontal(10).LineVertical(1).LineColor(Colors.Grey.Lighten1);
+
+                        row.RelativeColumn().Column(col =>
+                        {
+                            col.Item().Text("Dr. Kim Morales").Bold().FontSize(14); // Encabezado más grande
+                            col.Item().Text("Especialista en Medicina general").FontSize(12);
+                            col.Item().Text("e-mail: helpdesk@asersoat.com").FontSize(11);
+                            col.Item().Text("Teléfonos:").FontSize(11);
+                            col.Item().PaddingTop(2).Text("").FontSize(11);
+                            col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
+                        });
                     });
-                    page.Footer().AlignRight().Text("Firma del radiólogo");
+
+
+                    page.Content().Column(content =>
+                    {
+                        // Primera fila
+                        content.Item().Row(row =>
+                        {
+                            row.ConstantItem(275).Column(col =>
+                            {
+                                col.Item().PaddingTop(10).Text("Fecha:").FontSize(11).Bold();
+                                col.Item().Text($"Apellidos: {consulta.MedicoConsultaDNavigation.ApellidosUsuario}").FontSize(11).Bold();
+                                col.Item().Text("Nombres:").FontSize(11).Bold();
+                                col.Item().Text("Edad:").FontSize(11).Bold();
+                                col.Item().Text("Alergias:").FontSize(11).Bold();
+                                col.Item().Text("Diagnostico:").FontSize(11).Bold();
+
+                            });
+
+                            row.ConstantItem(275).Column(col =>
+                            {
+                                col.Item().PaddingTop(10).Text("Receta: ").Bold().FontSize(14); // Encabezado más grande
+                                col.Item().Text("CC: ").FontSize(12);
+
+                            });
+
+                            row.AutoItem().PaddingHorizontal(10).LineVertical(1).LineColor(Colors.Grey.Lighten1);
+
+                            row.ConstantItem(275).Column(col =>
+                            {
+                                col.Item().PaddingTop(10).Text("Fecha:").FontSize(11).Bold();
+                                col.Item().Text("Apellidos:").FontSize(11).Bold();
+                                col.Item().Text("Nombres:").FontSize(11).Bold();
+                                col.Item().Text("Edad:").FontSize(11).Bold();
+                                col.Item().Text("Diagnostico:").FontSize(11).Bold();
+                            });
+
+                            row.ConstantItem(275).Column(col =>
+                            {
+                                col.Item().PaddingTop(10).Text("Receta: ").Bold().FontSize(14); // Encabezado más grande
+                                col.Item().Text("CC: ").FontSize(12);
+                            });
+                        });
+
+                        // Segunda fila (Nueva fila)
+                        content.Item().Row(row =>
+                        {
+                            row.ConstantItem(530).PaddingTop(50).Column(col =>
+                            {
+                                col.Item().Text("ESTUDIO").Bold().FontSize(14); // Nuevo contenido
+                                col.Item().Text("Texto adicional").FontSize(12);
+                            });
+
+                            row.ConstantItem(20).PaddingTop(50).Column(col =>
+                            {
+                                col.Item().Text("").FontSize(12);
+                                col.Item().Text("x4").FontSize(12);
+                            });
+
+                            row.AutoItem().PaddingHorizontal(10).LineVertical(1).LineColor(Colors.Grey.Lighten1);
+
+                            row.ConstantItem(550).PaddingTop(50).Column(col =>
+                            {
+                                col.Item().PaddingBottom(20).Text("OBSERVACIONES").Bold().FontSize(14); // Nuevo contenido
+                                col.Item().MinWidth(300).Text("Texto adicional").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+                                col.Item().MinWidth(300).Text("").FontSize(12);
+
+
+
+
+                            });
+
+                        });
+
+
+
+
+
+
+                    });
+
+                    page.Footer().Column(footer =>
+                    {// Nueva fila del footer
+
+
+                        // Primera fila del footer
+                        footer.Item().Row(row =>
+                        {
+                            row.ConstantItem(530).Column(col =>
+                            {
+                                col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
+                                col.Item().Text("Direccion: Av de la Prensa N49-180 y Juan Holguín Edifico Amafkar sexto piso, Chordeleg - Ecuador").FontSize(11).AlignCenter();
+                            });
+
+                            row.AutoItem().PaddingHorizontal(30).LineVertical(1).LineColor(Colors.Grey.Lighten1);
+
+                            row.RelativeColumn().Column(col =>
+                            {
+                                col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
+                                col.Item().Text("Direccion: Av de la Prensa N49-180 y Juan Holguín Edifico Amafkar sexto piso, Chordeleg - Ecuador").FontSize(11).AlignCenter();
+                            });
+                        });
+
+
+                    });
+
                 });
             });
         }
@@ -1686,7 +2591,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
             return Ok(pacientes);
         }
 
-   
+
 
     }
 

@@ -63,6 +63,8 @@ namespace MedicExpermed.Services
              .Include(c => c.ConsultaImagen)  // Relación con la entidad ConsultaImagen (colección)
              .Include(c => c.ConsultaDiagnostico)  // Relación con la entidad ConsultaDiagnostico (colección)
              .Include(c => c.ConsultaAntecedentesFamiliares)  // Relación con la entidad Antecedentes Familiares
+             .Include(c => c.MedicoConsultaDNavigation)  // Relación con la entidad Antecedentes Familiares
+
              .FirstOrDefaultAsync(c => c.IdConsulta == id);
 
          
@@ -106,7 +108,8 @@ namespace MedicExpermed.Services
                 TipoConsultaId = consultum.TipoConsultaC ?? 0,
                 NotasEvolucion = consultum.NotasevolucionConsulta,
                 ConsultaPrincipal = consultum.ConsultaprincipalConsulta,
-                EstadoConsulta = consultum.EstadoConsultaC
+                EstadoConsulta = consultum.EstadoConsultaC,
+              
             };
 
             // Mapea las listas relacionadas (si es necesario)
