@@ -730,8 +730,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                 container.Page(page =>
                 {
                     page.Margin(20);
-                    page.Size(PageSizes.A4);
-
+                    page.Size(700, 960);
                     page.DefaultTextStyle(x => x.FontFamily("Arial").FontSize(10));
 
                     // Header con una tabla de 6 columnas
@@ -739,12 +738,12 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                     {
                         table.ColumnsDefinition(columns =>
                         {
-                            columns.RelativeColumn(3); // Establecimiento
-                            columns.RelativeColumn(2); // Nombre
-                            columns.RelativeColumn(2); // Apellido
-                            columns.RelativeColumn(1); // Sexo
-                            columns.RelativeColumn(1); // Edad
-                            columns.RelativeColumn(2); // Nº Historia Clínica
+                            columns.ConstantColumn(100); // Establecimiento
+                            columns.ConstantColumn(100); // Nombre
+                            columns.ConstantColumn(100); // Apellido
+                            columns.ConstantColumn(70); // Sexo
+                            columns.ConstantColumn(70); // Edad
+                            columns.ConstantColumn(100); // Nº Historia Clínica
                         });
 
                         // Fila de encabezados
@@ -1534,8 +1533,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                 container.Page(page =>
                 {
                     page.Margin(20);
-                    page.Size(PageSizes.A4);
-
+                    page.Size(700, 960);
                     page.DefaultTextStyle(x => x.FontFamily("Arial").FontSize(10));
 
                     // Contenido de la segunda página con una sola tabla de 5 columnas
