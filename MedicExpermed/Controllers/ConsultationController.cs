@@ -810,24 +810,18 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
 
                         // Fila de contenido
-                        table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3).Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation != null
-                                ? $"{consulta.PacienteConsultaPNavigation.DireccionPacientes}" : "Dirección no disponible")
+                        table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3).Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation.DireccionPacientes)
                             .FontSize(7);
                         table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3)
-                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation != null
-                            ? $"{consulta.PacienteConsultaPNavigation.PrimernombrePacientes != null}" : "Primer Nombre no disponible").FontSize(7);
+                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation.PrimernombrePacientes).FontSize(7);
                         table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3)
-                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation != null
-                           ? $"{consulta.PacienteConsultaPNavigation.PrimerapellidoPacientes}" : "Apellido no disponible").FontSize(7);
+                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation.PrimerapellidoPacientes).FontSize(7);
                         table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3)
-                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation != null
-                            ? $"{consulta.PacienteConsultaPNavigation.SexoPacientesCaNavigation.DescripcionCatalogo}" : "Genero no disponible").FontSize(7);
+                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation.SexoPacientesCaNavigation.DescripcionCatalogo).FontSize(7);
                         table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3)
-                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation != null
-                            ? $"{consulta.PacienteConsultaPNavigation.EdadPacientes}" : "Edad no disponible").FontSize(7);
+                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation.EdadPacientes).FontSize(7);
                         table.Cell().Border(1).BorderColor("#808080").MinHeight(7).AlignCenter().PaddingTop(3)
-                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation != null
-                           ? $"{consulta.PacienteConsultaPNavigation.CiPacientes}" : "Numero documento no disponible").FontSize(7);
+                            .Element(CellStyle => CellStyle.Background("#FFFFFF")).Text(consulta.PacienteConsultaPNavigation.CiPacientes).FontSize(7);
                     });
 
                     // Contenido principal con múltiples tablas
@@ -1177,18 +1171,18 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
                                     // Fila dentro de la tabla anidada 
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("FECHA DE MEDICIÓN").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).AlignCenter().Text(consulta.FechacreacionConsulta).Bold().FontSize(5);
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("4").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("5").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("6").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("6").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
                                     // Fila dentro de la tabla anidada 
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("TEMPERATURA °C").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("3").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("4").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("5").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("6").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("6").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text(consulta.TemperaturaConsulta).Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
 
 
                                 });
@@ -1219,8 +1213,8 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
                                     // Fila dentro de la tabla anidada 
                                     nestedTable.Cell().BorderRight(1).BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("PRESIÓN ARTERIAL").FontSize(5).Bold().AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text(consulta.PresionarterialdiastolicaConsulta).FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text(consulta.PresionarterialsistolicaConsulta).FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
@@ -1262,7 +1256,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                     nestedTable.Cell().BorderRight(1).BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("PULSO / min").FontSize(5).Bold().AlignCenter();
                                     nestedTable.Cell().BorderRight(1).BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("FRECUENCIA\r\nRESPIRATORIA").FontSize(5).Bold().AlignCenter();
 
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
+                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text(consulta.PulsoConsulta).FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(10).MinWidth(3).Text("").FontSize(4).AlignCenter();
@@ -1366,28 +1360,28 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                     nestedTable.Cell().BorderTop(1).BorderLeft(2).BorderBottom(1).BorderColor("#C6C2C2").Background("#99ccff").MinHeight(10).MinWidth(3).Text("SP").Bold().FontSize(5).AlignCenter();
                                     // Continúa agregando las celdas necesarias
                                     nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(12).MinWidth(3).Text("1. CABEZA").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Cabeza == true ? "X" : "").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Cabeza == false ? "X" : "").Bold().FontSize(5).AlignCenter();
 
                                     nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(12).MinWidth(3).Text("2. CUELLO").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Cabeza == true ? "X": "").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Cabeza == false ? "X": "").Bold().FontSize(5).AlignCenter();
 
                                     nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(10).MinWidth(3).Text("3. TÓRAX").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Torax == true ? "X" : "").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Torax == false ? "X" : "").Bold().FontSize(5).AlignCenter();
 
                                     nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(12).MinWidth(3).Text("4. ABDOMEN").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Abdomen == true ? "X" : "").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Abdomen == false ? "X" : "").Bold().FontSize(5).AlignCenter();
 
                                     nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(12).MinWidth(3).Text("5. PELVIS").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Pelvis == true ? "X" :"").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Pelvis == false ? "X" :"").Bold().FontSize(5).AlignCenter();
 
                                     nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(12).MinWidth(3).Text("6 . EXTREMIDADES").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
-                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text("").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Extremidades == true ? "X" : "").Bold().FontSize(5).AlignCenter();
+                                    nestedTable.Cell().BorderTop(1).BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3).Text(consulta.ConsultaExamenFisico.Extremidades == false ? "X" : "").Bold().FontSize(5).AlignCenter();
 
 
                                 });
@@ -1407,11 +1401,11 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
                                     // Contenido de la tabla de una sola columna
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
-                                        .Text("Contenido de la tabla anidada con una sola columna").FontSize(9).AlignStart();
+                                        .Text("").FontSize(9).AlignStart();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
-                                       .Text("Contenido de la tabla anidada con una sola columna").FontSize(9).AlignStart();
+                                       .Text("").FontSize(9).AlignStart();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
-                                       .Text("Contenido de la tabla anidada con una sola columna").FontSize(9).AlignStart();
+                                       .Text("").FontSize(9).AlignStart();
                                 });
                             });
                         });
@@ -1461,53 +1455,64 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             // Las demás columnas siguen el mismo patrón...
 
                             // Subtabla con 10 columnas
+
+                            // Asumamos que 'consultaDiagnostico' es una instancia de ConsultaDiagnostico
+                            var consultaDiagnostico = new ConsultaDiagnostico
+                            {
+                                ObservacionDiagnostico = "Observación Ejemplo",
+                              
+
+                                PresuntivoDiagnosticos = true,
+                                DefinitivoDiagnosticos = false,
+
+                                Diagnostico = new Diagnostico
+                                {
+                                    UuidDiagnostico = "CIE123",
+
+                                }
+                            };                            // Crear una subtabla con 10 columnas
+                                                          // Crear una tabla principal
                             table.Cell().ColumnSpan(9).Element(CellStyle =>
                             {
-                                // Crear una subtabla con 10 columnas
                                 CellStyle.Background("#ffffff").BorderLeft(2).BorderRight(2).BorderBottom(2).BorderColor("#808080").Table(nestedTable =>
                                 {
-                                    // Definir 10 columnas dentro de la subtabla
+                                    // Definir columnas dentro de la subtabla
                                     nestedTable.ColumnsDefinition(columns =>
                                     {
                                         columns.ConstantColumn(14);  // Columna 1
-                                        columns.ConstantColumn(250);   // Columna 2 (Proporción más amplia)
-                                        columns.ConstantColumn(20);  // Columna 3
-                                        columns.ConstantColumn(18);  // Columna 4
-                                        columns.ConstantColumn(16);  // Columna 5
-                                        columns.ConstantColumn(14);  // Columna 6
-                                        columns.RelativeColumn(2);   // Columna 7 (Proporción más amplia)
-                                        columns.ConstantColumn(18);  // Columna 8
-                                        columns.ConstantColumn(18);  // Columna 9
-                                        columns.ConstantColumn(20);  // Columna 10
+                                        columns.ConstantColumn(250);  // Columna 2
+                                        columns.ConstantColumn(20);   // Columna 3
+                                        columns.ConstantColumn(18);   // Columna 4
+                                        columns.ConstantColumn(16);   // Columna 5
+                                        columns.ConstantColumn(14);   // Columna 6
+                                        columns.RelativeColumn(2);    // Columna 7
+                                        columns.ConstantColumn(18);   // Columna 8
+                                        columns.ConstantColumn(18);   // Columna 9
+                                        columns.ConstantColumn(20);   // Columna 10
                                     });
 
-                                    // Fila dentro de la subtabla con 10 celdas
+                                    // Agregar fila con datos de consultaDiagnostico
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(12).MinWidth(3)
                                         .Text("1").FontSize(9).AlignCenter();
                                     nestedTable.Cell().BorderBottom(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
-                                        .Text("").FontSize(9).AlignCenter();
-                                    // Fila dentro de la subtabla con 10 celdas
+                                        .Text(consultaDiagnostico.ObservacionDiagnostico).FontSize(9).AlignCenter();
                                     nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
-                                        .Text("1").FontSize(9).AlignCenter();
+                                        .Text(consultaDiagnostico.Diagnostico.UuidDiagnostico).FontSize(9).AlignCenter();
                                     nestedTable.Cell().BorderBottom(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3)
-                                        .Text("").FontSize(9).AlignCenter();
+                                        .Text(consultaDiagnostico.PresuntivoDiagnosticos== true ? "X" : "").FontSize(9).AlignCenter();
                                     nestedTable.Cell().BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3)
-                                        .Text("").FontSize(9).AlignCenter();
-                                    // Fila dentro de la subtabla con 10 celdas
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ccffcc").MinHeight(12).MinWidth(3)
-                                        .Text("2").FontSize(9).AlignCenter();
-                                    nestedTable.Cell().BorderBottom(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
-                                        .Text("").FontSize(9).AlignCenter();
-                                    // Fila dentro de la subtabla con 10 celdas
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
-                                        .Text("1").FontSize(9).AlignCenter();
-                                    nestedTable.Cell().BorderBottom(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3)
-                                        .Text("").FontSize(9).AlignCenter();
-                                    nestedTable.Cell().BorderBottom(1).BorderLeft(1).BorderColor("#C6C2C2").Background("#ffff99").MinHeight(12).MinWidth(3)
-                                        .Text("").FontSize(9).AlignCenter();
-                                    // Continúa con las celdas...
+                                        .Text(consultaDiagnostico.DefinitivoDiagnosticos == true ? "X" : "").FontSize(9).AlignCenter();
+
+                                    // Celdas vacías si hay menos datos
+                                    for (int i = 5; i < 10; i++)
+                                    {
+                                        nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#ffffff").MinHeight(12).MinWidth(3)
+                                            .Text("").FontSize(9).AlignCenter();
+                                    }
                                 });
                             });
+
+
                         });
 
 
@@ -1528,7 +1533,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
                             // Segunda columna con la descripción
                             table.Cell().MinHeight(14).BorderTop(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Element(CellStyle =>
-                                CellStyle.Background("#ccccff")).AlignRight().PaddingTop(3).Text("REGISTRAR LOS PLANES: DIAGNOSTICO, TERAPÉUTICO Y\r\nEDUCACIONAL").FontSize(7);
+                                CellStyle.Background("#ccccff")).AlignRight().PaddingTop(3).Text(consulta.PlantratamientoConsulta).FontSize(7);
 
                             // Subtabla debajo del encabezado que abarca todo el ancho
                             table.Cell().ColumnSpan(2).Element(CellStyle =>

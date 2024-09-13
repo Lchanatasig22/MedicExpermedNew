@@ -75,7 +75,6 @@ function showModal() {
 }
 
 
-
 function buscarPaciente() {
     const searchValue = document.getElementById('search-input').value.trim();
     const searchCriteria = document.getElementById('search-criteria').value;
@@ -930,8 +929,9 @@ function generatePdf() {
         return;
     }
 
-    // Crear la URL dinámica de forma manual
-    const url = `/Consultation/GeneratePdf?id=${consultaId}&tipoDocumento=${selectedOption}`;
+
+    // Crear la URL usando @Url.Action
+   // Verifica la URL generada
 
     fetch(url, {
         method: 'POST',

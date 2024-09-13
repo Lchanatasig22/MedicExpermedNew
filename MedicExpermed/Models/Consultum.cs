@@ -10,6 +10,8 @@ namespace MedicExpermed.Models
             Cita = new HashSet<Citum>();
             ConsultaAntecedentesFamiliares = new AntecedentesFamiliare();
             ConsultaOrganosSistemas = new OrganosSistema();
+            ConsultaExamenFisico = new ExamenFisico();
+            ConsultaDiagnostico = new ConsultaDiagnostico();
 
         }
 
