@@ -37,7 +37,7 @@
         <input type="hidden" asp-for="MedicoId" id="medicoId" value="@ViewBag.UsuarioId" />
         <input type="hidden" asp-for="EspecialidadId" id="especialidadId" value="@ViewBag.UsuarioIdEspecialidad" />
         <input type="hidden" asp-for="FechaCreacion" id="FechacreacionConsulta" value="" />
-        <input type="text" asp-for="Id" id="consultaId" />
+        <input type="hidden" asp-for="Id" id="consultaId" />
 
         <!--Primer Formulario-->
         <div class="setup-content" id="step-1">
@@ -50,20 +50,10 @@
 
             <div id="search-container" data-url="@Url.Action("BuscarPacientes", "Consultation")">
                 <div class="input-group sm-2">
-                    <!-- Dropdown para seleccionar el criterio de búsqueda -->
-                    <select id="search-criteria" class="form-select">
-                        <option>Búsqueda por</option>
-                        <option value="cedula">Cédula</option>
-                        <option value="nombre">Nombre</option>
-                        <option value="apellido">Apellido</option>
-                    </select>
-
-                    <input id="search-input" type="text" class="form-control" placeholder="Buscar paciente" aria-label="Buscar paciente">
-
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-primary" type="button" onclick="buscarPaciente()">
-                            <i class="fa fa-search"></i> Buscar
-                        </button>
+                    <div class="col-sm-3">
+                        <label for="search-input" ></label>
+                        <input id="search-input" type="hidden" class="form-control" placeholder="Buscar paciente" aria-label="Buscar paciente">
+                        <input type="hidden" id="search-criteria" value="cedula"> <!-- Criterio de búsqueda fijo -->
                     </div>
                 </div>
 
@@ -246,8 +236,8 @@
                 <button type="button" class="btn btn-outline-primary" onclick="showModal()">
                     <i class="fa-regular fa-file-pdf"></i> Generar Documento
                 </button>
-                <button class="btn btn-outline-primary nextBtn btn-lg ms-3" type="button" onclick="goToNextStep(2, event)">Siguiente <i class="fa fa-arrow-right"></i></button>
-          
+@*                 <button class="btn btn-outline-primary nextBtn btn-lg ms-3" type="button" onclick="goToNextStep(2, event)">Siguiente <i class="fa fa-arrow-right"></i></button>
+ *@          
             </div>
 
 
@@ -1805,7 +1795,36 @@
 
          
     </script>
+
+  
+ 
     <script src="~/js/searchConsultationFunctions.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            // Copiar el valor de 'historiaClinica' al campo de búsqueda automáticamente
+            var historiaClinica = $("#historiaClinica").val();
+            $("#search-input").val(historiaClinica);
+
+            // Obtener el criterio de búsqueda (en este caso 'cedula')
+            var searchCriteria = $("#search-criteria").val();
+
+            // Activar la búsqueda automáticamente cuando el valor del campo de búsqueda cambie
+            $("#search-input").on("input", function () {
+                var searchValue = $(this).val().trim();
+                if (searchValue) {
+                    buscarPaciente(searchCriteria, searchValue); // Llama a la función con los parámetros
+                }
+            });
+
+            // Ejecutar la búsqueda inicial al cargar la página (si el campo tiene valor)
+            if (historiaClinica.trim() !== "") {
+                buscarPaciente(searchCriteria, historiaClinica);
+            }
+        });
+
+
+    </script>
 
 
 

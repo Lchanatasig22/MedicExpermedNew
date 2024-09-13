@@ -51,7 +51,28 @@ namespace MedicExpermed.Services
         }
 
 
-        //
+        /// <summary>
+        /// Consulta por id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Consultum?> GetConsultaByIdAsync(int id)
+        {
+            // Obtener la consulta por ID
+            var consulta = await _context.Consulta
+                .Where(c => c.IdConsulta == id)
+                .Include(c => c.ConsultaDiagnostico)
+                .Include(c => c.ConsultaImagen)
+                .Include(c => c.ConsultaLaboratorio)
+                .Include(c => c.ConsultaMedicamentos)
+                .Include(c => c.PacienteConsultaPNavigation)
+                .FirstOrDefaultAsync();
+
+            return consulta;
+        }
+
+
+
         public async Task<Consultation> ObtenerConsultaPorIdAsync(int id)
         {
             var consultum = await _context.Consulta

@@ -719,6 +719,7 @@ document.getElementById('anadirFilaLaboratorio').addEventListener('click', funct
 
 
 
+
 document.getElementById('consultationForm').addEventListener('submit', async function (event) {
     event.preventDefault(); // Evitar el comportamiento por defecto del formulario
 

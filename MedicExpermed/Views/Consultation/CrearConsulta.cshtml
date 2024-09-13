@@ -818,7 +818,7 @@
 
                 <!-- Enfermedad o Problema -->
                 <div class="col-sm-12 position-relative">
-                    <textarea type="text" maxlength="8000" rows="3" class="form-control" asp-for="EnfermedadConsulta" id="enfermedadProblema" placeholder="Coloque una breve descripción, Si desea hablar precione el microfono" required></textarea>
+                    <textarea  maxlength="8000" rows="3" class="form-control" asp-for="EnfermedadConsulta" name="EnfermedadConsulta" id="enfermedadProblema" placeholder="Coloque una breve descripción, Si desea hablar precione el microfono" required></textarea>
                     <i id="dictationIcon2" class="fa fa-microphone position-absolute" style="top: 35px; right: 15px; cursor: pointer;"></i>
                 </div>
 
@@ -1624,7 +1624,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="consulta-diagnostico-dias-incapacidad">Días de incapacidad</label>
-                                <input id="diasincapacidad_consulta" max="10000" asp-for="DiasIncapacidad" min="0" name="DiasIncapacidad" placeholder="0" type="number" value="0" class="form-control">
+                                <input id="diasincapacidad_consulta" asp-for="DiasIncapacidad"  name="DiasIncapacidad" placeholder="0" type="number" class="form-control">
                             </div>
                         </div>
                     </div>

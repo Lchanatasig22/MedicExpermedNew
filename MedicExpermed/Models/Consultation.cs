@@ -74,9 +74,7 @@ namespace MedicExpermed.Models
             Diagnosticos = new List<ConsultaDiagnosticoDTO>();
             OrganosSistemas = new OrganosSistema();
             ExamenFisico = new ExamenFisico();
-            MedicoConsultaDNavigation = new Usuario();
-            PacienteConsultaPNavigation = new Paciente();
-            SexoPacientesCaNavigation = new Catalogo();
+   
         }
     }
 

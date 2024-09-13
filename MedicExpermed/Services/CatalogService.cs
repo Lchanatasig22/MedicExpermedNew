@@ -89,7 +89,7 @@ namespace MedicExpermed.Services
 
             if (ningunTipo == null)
             {
-                throw new InvalidOperationException("No se encontró un tipo de parentesco con el nombre 'NINGUNO'.");
+                throw new InvalidOperationException("No se encontró un tipo de Alergias con el nombre 'NINGUNO'.");
             }
 
             return ningunTipo.IdCatalogo;
