@@ -907,64 +907,6 @@ document.getElementById('consultationForm').addEventListener('submit', async fun
     }
 });
 
-function generatePdf() {
-    const consultaId = $('#consultaId').val(); // Asegúrate de tener un campo hidden con el ID de la consulta
-    const selectedOption = $('#pdfOptions').val();
-
-    if (!selectedOption) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Por favor, seleccione un tipo de documento.'
-        });
-        return;
-    }
-
-    if (!consultaId) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'ID de consulta no encontrado.'
-        });
-        return;
-    }
 
 
-    // Crear la URL usando @Url.Action
-   // Verifica la URL generada
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error al generar el PDF');
-        }
-        return response.blob();
-    })
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        window.open(url, '_blank');
-
-        // Mostrar mensaje con SweetAlert después de generar el PDF
-        Swal.fire({
-            icon: 'success',
-            title: 'Documento generado',
-            text: 'El documento PDF ha sido generado exitosamente.'
-        });
-
-        // Cerrar el modal después de generar el PDF
-        $('#pdfModal').modal('hide');
-    })
-    .catch(error => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.message
-        });
-    });
-}
 

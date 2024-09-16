@@ -510,10 +510,10 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                     {
                         row.ConstantItem(550).Column(col =>
                         {
-                            col.Item().Text("Dr. Kim Morales").Bold().FontSize(14); // Encabezado más grande
-                            col.Item().Text("Especialista en Medicina general").FontSize(12);
-                            col.Item().Text("e-mail: helpdesk@asersoat.com").FontSize(11);
-                            col.Item().Text("Teléfonos:").FontSize(11);
+                            col.Item().Text("Dr:"+ consulta.MedicoConsultaDNavigation.NombresUsuario + consulta.MedicoConsultaDNavigation.ApellidosUsuario ).Bold().FontSize(14); // Encabezado más grande
+                            col.Item().Text("Especialista en: "+ consulta.Especialidad.NombreEspecialidad).FontSize(12);
+                            col.Item().Text("e-mail: "+ consulta.MedicoConsultaDNavigation.EmailUsuario ).FontSize(11);
+                            col.Item().Text("Teléfonos: "+ consulta.MedicoConsultaDNavigation.TelefonoUsuario).FontSize(11);
                             col.Item().PaddingTop(2).Text("").FontSize(11);
                             col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
                         });
@@ -522,10 +522,10 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
                         row.RelativeColumn().Column(col =>
                         {
-                            col.Item().Text("Dr. Kim Morales").Bold().FontSize(14); // Encabezado más grande
-                            col.Item().Text("Especialista en Medicina general").FontSize(12);
-                            col.Item().Text("e-mail: helpdesk@asersoat.com").FontSize(11);
-                            col.Item().Text("Teléfonos:").FontSize(11);
+                            col.Item().Text("Dr:" + consulta.MedicoConsultaDNavigation.NombresUsuario + consulta.MedicoConsultaDNavigation.ApellidosUsuario).Bold().FontSize(14); // Encabezado más grande
+                            col.Item().Text("Especialista en: " + consulta.Especialidad.NombreEspecialidad).FontSize(12);
+                            col.Item().Text("e-mail: " + consulta.MedicoConsultaDNavigation.EmailUsuario).FontSize(11);
+                            col.Item().Text("Teléfonos: " + consulta.MedicoConsultaDNavigation.TelefonoUsuario).FontSize(11);
                             col.Item().PaddingTop(2).Text("").FontSize(11);
                             col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
                         });
@@ -539,19 +539,19 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                         {
                             row.ConstantItem(275).Column(col =>
                             {
-                                col.Item().PaddingTop(10).Text("Fecha:").FontSize(11).Bold();
-                                col.Item().Text("Apellidos:").FontSize(11).Bold();
-                                col.Item().Text("Nombres:").FontSize(11).Bold();
-                                col.Item().Text("Edad:").FontSize(11).Bold();
-                                col.Item().Text("Alergias:").FontSize(11).Bold();
-                                col.Item().Text("Diagnostico:").FontSize(11).Bold();
+                                col.Item().PaddingTop(10).Text("Fecha: "+consulta.FechacreacionConsulta).FontSize(11).Bold();
+                                col.Item().Text("Apellidos: "+consulta.PacienteConsultaPNavigation.PrimerapellidoPacientes + consulta.PacienteConsultaPNavigation.SegundoapellidoPacientes).FontSize(11).Bold();
+                                col.Item().Text("Nombres: "+consulta.PacienteConsultaPNavigation.PrimernombrePacientes + consulta.PacienteConsultaPNavigation.SegundonombrePacientes).FontSize(11).Bold();
+                                col.Item().Text("Edad: " + consulta.PacienteConsultaPNavigation.EdadPacientes).FontSize(11).Bold();
+                                col.Item().Text("Alergias: "+consulta.ConsultaAlergiasIntNavigation.Catalogoalergia).FontSize(11).Bold();
+                                col.Item().Text("Diagnostico: "+consulta.ConsultaDiagnostico.IdConsultaDiagnostico).FontSize(11).Bold();
 
                             });
 
                             row.ConstantItem(275).Column(col =>
                             {
-                                col.Item().PaddingTop(10).Text("Receta: ").Bold().FontSize(14); // Encabezado más grande
-                                col.Item().Text("CC: ").FontSize(12);
+                                col.Item().PaddingTop(10).Text("Receta: "+consulta.ConsultaMedicamentos.SecuencialMedicamento).Bold().FontSize(14); // Encabezado más grande
+                                col.Item().Text("CC: "+consulta.PacienteConsultaPNavigation.CiPacientes).FontSize(12);
 
                             });
 
@@ -559,18 +559,18 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
                             row.ConstantItem(275).Column(col =>
                             {
-                                col.Item().PaddingTop(10).Text("Fecha:").FontSize(11).Bold();
-                                col.Item().Text("Apellidos:").FontSize(11).Bold();
-                                col.Item().Text("Nombres:").FontSize(11).Bold();
-                                col.Item().Text("Edad:").FontSize(11).Bold();
-                                col.Item().Text("Alergias:").FontSize(11).Bold();
-                                col.Item().Text("Diagnostico:").FontSize(11).Bold();
+                                col.Item().PaddingTop(10).Text("Fecha: " + consulta.FechacreacionConsulta).FontSize(11).Bold();
+                                col.Item().Text("Apellidos: " + consulta.PacienteConsultaPNavigation.PrimerapellidoPacientes + consulta.PacienteConsultaPNavigation.SegundoapellidoPacientes).FontSize(11).Bold();
+                                col.Item().Text("Nombres: " + consulta.PacienteConsultaPNavigation.PrimernombrePacientes + consulta.PacienteConsultaPNavigation.SegundonombrePacientes).FontSize(11).Bold();
+                                col.Item().Text("Edad: " + consulta.PacienteConsultaPNavigation.EdadPacientes).FontSize(11).Bold();
+                                col.Item().Text("Alergias: " + consulta.ConsultaAlergiasIntNavigation.Catalogoalergia).FontSize(11).Bold();
+                                col.Item().Text("Diagnostico: " + consulta.ConsultaDiagnostico.IdConsultaDiagnostico).FontSize(11).Bold();
                             });
 
                             row.ConstantItem(275).Column(col =>
                             {
-                                col.Item().PaddingTop(10).Text("Receta: ").Bold().FontSize(14); // Encabezado más grande
-                                col.Item().Text("CC: ").FontSize(12);
+                                col.Item().PaddingTop(10).Text("Receta: " + consulta.ConsultaMedicamentos.SecuencialMedicamento).Bold().FontSize(14); // Encabezado más grande
+                                col.Item().Text("CC: " + consulta.PacienteConsultaPNavigation.CiPacientes).FontSize(12);
                             });
                         });
 
@@ -580,13 +580,13 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             row.ConstantItem(530).PaddingTop(50).Column(col =>
                             {
                                 col.Item().Text("Prescipcion").Bold().FontSize(14); // Nuevo contenido
-                                col.Item().Text("Texto adicional").FontSize(12);
+                                col.Item().Text(consulta.ConsultaMedicamentos.ConsultaMedicamentosId).FontSize(12);
                             });
 
                             row.ConstantItem(20).PaddingTop(50).Column(col =>
                             {
                                 col.Item().Text("").FontSize(12);
-                                col.Item().Text("x4").FontSize(12);
+                                col.Item().Text("x"+consulta.ConsultaMedicamentos.DosisMedicamento).FontSize(12);
                             });
 
                             row.AutoItem().PaddingHorizontal(10).LineVertical(1).LineColor(Colors.Grey.Lighten1);
@@ -594,7 +594,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             row.ConstantItem(550).PaddingTop(50).Column(col =>
                             {
                                 col.Item().Text("Indicaciones").Bold().FontSize(14); // Nuevo contenido
-                                col.Item().Text("Texto adicional").FontSize(12);
+                                col.Item().Text(consulta.ConsultaMedicamentos.ObservacionMedicamento).FontSize(12);
                             });
 
                         });
@@ -614,12 +614,12 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             row.ConstantItem(550).PaddingTop(200).Column(col =>
                             {
                                 col.Item().Text("Recomendaciones no Farmacologicas").Bold().FontSize(14); // Nuevo contenido
-                                col.Item().Text("Texto adicional").FontSize(12);
-                                col.Item().Text("Texto adicional").FontSize(12);
-                                col.Item().Text("Texto adicional").FontSize(12);
-                                col.Item().Text("Texto adicional").FontSize(12);
-                                col.Item().Text("Texto adicional").FontSize(12);
-                                col.Item().Text("Texto adicional").FontSize(12);
+                                col.Item().Text(consulta.Reconofarmacologicas).FontSize(12);
+                                col.Item().Text("").FontSize(12);
+                                col.Item().Text("").FontSize(12);
+                                col.Item().Text("").FontSize(12);
+                                col.Item().Text("").FontSize(12);
+                                col.Item().Text("").FontSize(12);
                                 col.Item().PaddingTop(100).Text("").FontSize(12);
 
 
@@ -679,7 +679,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             row.ConstantItem(530).Column(col =>
                             {
                                 col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
-                                col.Item().Text("Direccion: Av de la Prensa N49-180 y Juan Holguín Edifico Amafkar sexto piso, Chordeleg - Ecuador").FontSize(11).AlignCenter();
+                                col.Item().Text(consulta.MedicoConsultaDNavigation.DireccionUsuario).FontSize(11).AlignCenter();
                             });
 
                             row.AutoItem().PaddingHorizontal(30).LineVertical(1).LineColor(Colors.Grey.Lighten1);
@@ -687,7 +687,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             row.RelativeColumn().Column(col =>
                             {
                                 col.Item().PaddingVertical(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
-                                col.Item().Text("Direccion: Av de la Prensa N49-180 y Juan Holguín Edifico Amafkar sexto piso, Chordeleg - Ecuador").FontSize(11).AlignCenter();
+                                col.Item().Text(consulta.MedicoConsultaDNavigation.DireccionUsuario).FontSize(11).AlignCenter();
                             });
                         });
 

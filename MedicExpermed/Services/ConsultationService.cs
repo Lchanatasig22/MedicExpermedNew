@@ -66,6 +66,10 @@ namespace MedicExpermed.Services
                 .Include(c => c.ConsultaLaboratorio)
                 .Include(c => c.ConsultaMedicamentos)
                 .Include(c => c.PacienteConsultaPNavigation)
+                .Include(c => c.MedicoConsultaDNavigation)
+                .Include(c => c.Especialidad)
+                .Include(c => c.ConsultaAlergiasIntNavigation)
+                
                 .FirstOrDefaultAsync();
 
             return consulta;
@@ -84,6 +88,7 @@ namespace MedicExpermed.Services
              .Include(c => c.ConsultaImagen)  // Relación con la entidad ConsultaImagen (colección)
              .Include(c => c.ConsultaDiagnostico)  // Relación con la entidad ConsultaDiagnostico (colección)
              .Include(c => c.ConsultaAntecedentesFamiliares)  // Relación con la entidad Antecedentes Familiares
+             .Include(c => c.MedicoConsultaDNavigation)  // Relación con la entidad Antecedentes Familiares
              .Include(c => c.MedicoConsultaDNavigation)  // Relación con la entidad Antecedentes Familiares
 
              .FirstOrDefaultAsync(c => c.IdConsulta == id);
