@@ -701,14 +701,13 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
         private IDocument CreateJustificacionDocument(Consultum consulta)
         {
-            // Tamaño carta con orientación horizontal
             return Document.Create(container =>
             {
 
                 container.Page(page =>
                 {
-                    // Tamaño de la página en formato A4 y márgenes
-                    page.Size(595, 842); // Ancho: 210 mm, Alto: 297 mm en puntos
+                    // Tamaño de la página en formato A4 horizontal y márgenes
+                    page.Size(842, 595); // Ancho: 297 mm, Alto: 210 mm en puntos
                     page.Margin(50); // Ajusta el margen según sea necesario
 
                     // Encabezado del documento
@@ -720,9 +719,9 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                // Logo de la clínica
 
                                // Detalles de la clínica
-                               column.Item().Text(consulta.MedicoConsultaDNavigation.Establecimiento.DireccionEstablecimiento, TextStyle.Default.Size(16).Bold());
-                               column.Item().Text(consulta.MedicoConsultaDNavigation.DireccionUsuario);
-                               column.Item().Text(consulta.MedicoConsultaDNavigation.TelefonoUsuario);
+                               column.Item().Text("consulta.MedicoConsultaDNavigation.Establecimiento.DireccionEstablecimiento", TextStyle.Default.Size(16).Bold());
+                               column.Item().Text("consulta.MedicoConsultaDNavigation.DireccionUsuario");
+                               column.Item().Text("consulta.MedicoConsultaDNavigation.TelefonoUsuario");
                            });
 
                         row.ConstantColumn(50); // Espacio entre el logo y el contenido.
@@ -757,11 +756,9 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                     page.Footer().AlignCenter().Text($"Emitido el {DateTime.Now.ToShortDateString()}", TextStyle.Default.Italic());
                 });
 
-
-
-
             });
         }
+
 
         private IDocument CreateConsultaDocument(Consultum consulta)
         {
