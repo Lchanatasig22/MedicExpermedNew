@@ -718,12 +718,11 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                            .Column(column =>
                            {
                                // Logo de la clínica
-                               column.Item().Image("C:\\Users\\SAFERISK\\Source\\Repos\\MedicExpermedNew\\MedicExpermed\\wwwroot\\images\\ExpermedLogoAzul-removebg-preview.png", ImageScaling.FitWidth); // Ruta del logo
 
                                // Detalles de la clínica
-                               column.Item().Text("Clínica de Salud Integral", TextStyle.Default.Size(16).Bold());
-                               column.Item().Text("Av. Siempre Viva 123, Ciudad");
-                               column.Item().Text("Tel: 555-1234");
+                               column.Item().Text(consulta.MedicoConsultaDNavigation.Establecimiento.DireccionEstablecimiento, TextStyle.Default.Size(16).Bold());
+                               column.Item().Text(consulta.MedicoConsultaDNavigation.DireccionUsuario);
+                               column.Item().Text(consulta.MedicoConsultaDNavigation.TelefonoUsuario);
                            });
 
                         row.ConstantColumn(50); // Espacio entre el logo y el contenido.
