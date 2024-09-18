@@ -62,13 +62,23 @@ namespace MedicExpermed.Services
             var consulta = await _context.Consulta
                 .Where(c => c.IdConsulta == id)
                 .Include(c => c.ConsultaDiagnostico)
+                .ThenInclude(c => c.Diagnostico)
                 .Include(c => c.ConsultaImagen)
+                .ThenInclude(c => c.Imagen)
                 .Include(c => c.ConsultaLaboratorio)
+                .ThenInclude(c => c.CatalogoLaboratorio)
                 .Include(c => c.ConsultaMedicamentos)
+                .ThenInclude(c => c.Medicamento)
                 .Include(c => c.PacienteConsultaPNavigation)
+                .ThenInclude(c => c.SexoPacientesCaNavigation)
                 .Include(c => c.MedicoConsultaDNavigation)
+                .ThenInclude(c => c.Establecimiento)
                 .Include(c => c.Especialidad)
                 .Include(c => c.ConsultaAlergiasIntNavigation)
+                .ThenInclude(c => c.Catalogoalergia)
+                .Include(c => c.ConsultaOrganosSistemas)
+                .Include(c => c.ConsultaAntecedentesFamiliares)
+                .Include(c => c.ConsultaExamenFisico)
                 
                 .FirstOrDefaultAsync();
 

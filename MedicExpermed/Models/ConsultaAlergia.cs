@@ -9,6 +9,7 @@ namespace MedicExpermed.Models
         public ConsultaAlergia()
         {
             Consulta = new HashSet<Consultum>();
+            Catalogoalergia = new Catalogo();
         }
 
         public int IdConsultaAlergias { get; set; }
