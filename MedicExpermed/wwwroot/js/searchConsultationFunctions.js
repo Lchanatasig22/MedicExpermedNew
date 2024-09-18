@@ -744,7 +744,7 @@ document.getElementById('consultationForm').addEventListener('submit', async fun
         PlanTratamiento: document.getElementById('plantratamiento_consulta')?.value || null,
         DiasIncapacidad: parseInt(document.getElementById('diasincapacidad_consulta')?.value) || 0,
         Observacion: document.getElementById('observacion_consulta')?.value || null,
-        AntecedentesPersonales: document.getElementById('antecedentespersonales_consulta')?.value || 'Sin especificar',
+        AntecedentesPersonales: document.getElementById('antecedentespersonales_consulta')?.value || '',
         MedicoId: parseInt(document.getElementById('medicoId')?.value) || null,
         EspecialidadId: parseInt(document.getElementById('especialidadId')?.value) || null,
         TipoConsultaId: parseInt(document.getElementById('tipoConsultaC')?.value) || null,

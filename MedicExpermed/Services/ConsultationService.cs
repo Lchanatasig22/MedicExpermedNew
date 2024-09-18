@@ -78,6 +78,8 @@ namespace MedicExpermed.Services
                 .ThenInclude(c => c.Catalogoalergia)
                 .Include(c => c.ConsultaOrganosSistemas)
                 .Include(c => c.ConsultaAntecedentesFamiliares)
+                .ThenInclude(c => c.ParentescocatalogoCardiopatiaNavigation)
+
                 .Include(c => c.ConsultaExamenFisico)
                 
                 .FirstOrDefaultAsync();

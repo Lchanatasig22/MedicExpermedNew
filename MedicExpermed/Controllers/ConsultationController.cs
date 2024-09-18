@@ -950,7 +950,21 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
                                 });
                             });
-                            table.Cell().MinHeight(14).BorderLeft(2).BorderRight(2).BorderBottom(1).BorderColor("#808080").Text(consulta.ConsultaAntecedentesFamiliares.ParentescocatalogoCardiopatia).FontSize(10);
+                            if (!string.IsNullOrEmpty(consulta.ConsultaAntecedentesFamiliares.ParentescocatalogoCardiopatiaNavigation.DescripcionCatalogo +"-"+ consulta.ConsultaAntecedentesFamiliares.ObserCardiopatia))
+                            {
+                                table.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
+                                    .Text(consulta.ConsultaAntecedentesFamiliares.ParentescocatalogoCardiopatiaNavigation.DescripcionCatalogo + "-" + consulta.ConsultaAntecedentesFamiliares.ObserCardiopatia).FontSize(9).AlignStart();
+                            }
+                            else
+                            {
+
+
+                                table.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
+                                    .Text("").FontSize(9).AlignStart();
+
+                            }
+
+
                             table.Cell().MinHeight(16).BorderLeft(2).BorderBottom(2).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
 
 
@@ -970,7 +984,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                             var texto = consulta.EnfermedadConsulta;
 
                             // Definir un límite de caracteres que se ajuste a una celda.
-                            var limiteCaracteresPorFila = 50;
+                            var limiteCaracteresPorFila = 700;
 
                             // Dividir el texto en fragmentos según el límite
                             var partesTexto = Enumerable.Range(0, (texto.Length + limiteCaracteresPorFila - 1) / limiteCaracteresPorFila)
@@ -984,11 +998,7 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
                                 // Las siguientes celdas serán "quemadas" (vacías)
                                 table.Cell().BorderLeft(2).MinHeight(14).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
-                                table.Cell().BorderLeft(2).MinHeight(14).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
-                                table.Cell().BorderLeft(2).MinHeight(14).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
-                                table.Cell().BorderLeft(2).MinHeight(14).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
-                                table.Cell().BorderLeft(2).MinHeight(14).BorderBottom(2).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
-                            }
+                                                          }
                         });
                         //QUINTA TABLA
                         contentColumn.Item().PaddingTop(7).Table(table =>
@@ -1410,13 +1420,43 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
                                         columns.RelativeColumn(1); // Una columna que abarca todo el ancho
                                     });
 
-                                    // Contenido de la tabla de una sola columna
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
-                                        .Text("").FontSize(9).AlignStart();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
-                                       .Text("").FontSize(9).AlignStart();
-                                    nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
-                                       .Text("").FontSize(9).AlignStart();
+                                    if (!string.IsNullOrEmpty(consulta.ConsultaExamenFisico.ObserCabeza))
+                                    {
+                                        nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
+                                            .Text(consulta.ConsultaExamenFisico.ObserCabeza).FontSize(9).AlignStart();
+                                    }
+                                   
+                                    if (!string.IsNullOrEmpty(consulta.ConsultaExamenFisico.ObserCuello))
+                                    {
+                                        nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
+                                            .Text(consulta.ConsultaExamenFisico.ObserCuello).FontSize(9).AlignStart();
+                                    }
+                                    
+                                    if (!string.IsNullOrEmpty(consulta.ConsultaExamenFisico.ObserTorax))
+                                    {
+                                        nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
+                                            .Text(consulta.ConsultaExamenFisico.ObserTorax).FontSize(9).AlignStart();
+                                    }
+                                   
+                                    if (!string.IsNullOrEmpty(consulta.ConsultaExamenFisico.ObserAbdomen))
+                                    {
+                                        nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
+                                            .Text(consulta.ConsultaExamenFisico.ObserAbdomen).FontSize(9).AlignStart();
+                                    }
+                                   
+                                    if (!string.IsNullOrEmpty(consulta.ConsultaExamenFisico.ObserPelvis))
+                                    {
+                                        nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
+                                            .Text(consulta.ConsultaExamenFisico.ObserPelvis).FontSize(9).AlignStart();
+                                    }
+                                   
+                                    if (!string.IsNullOrEmpty(consulta.ConsultaExamenFisico.ObserExtremidades))
+                                    {
+                                        nestedTable.Cell().Border(1).BorderColor("#C6C2C2").Background("#FFFFFF").MinHeight(12).MinWidth(3)
+                                            .Text(consulta.ConsultaExamenFisico.ObserExtremidades).FontSize(9).AlignStart();
+                                    }
+                                  
+
                                 });
                             });
                         });
