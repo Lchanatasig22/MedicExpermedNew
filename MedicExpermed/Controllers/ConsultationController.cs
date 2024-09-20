@@ -998,7 +998,11 @@ request.AntecedentesFamiliares.ParentescocatalogoOtro ?? default(int),
 
                                 // Las siguientes celdas serán "quemadas" (vacías)
                                 table.Cell().BorderLeft(2).MinHeight(14).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
-                                                          }
+                                table.Cell().BorderLeft(2).MinHeight(14).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
+                                table.Cell().BorderLeft(2).MinHeight(14).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
+                                table.Cell().BorderLeft(2).MinHeight(14).BorderBottom(1).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
+                                table.Cell().BorderLeft(2).MinHeight(14).BorderBottom(2).BorderRight(2).BorderColor("#808080").Text("").FontSize(10);
+                            }
                         });
                         //QUINTA TABLA
                         contentColumn.Item().PaddingTop(7).Table(table =>
